@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 // import removed: flutter_colorpicker
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/onboarding/onboarding_scaffold.dart';
 import 'package:frosty/screens/onboarding/onboarding_welcome.dart';
 import 'package:frosty/screens/settings/stores/settings_store.dart';
@@ -23,9 +24,10 @@ class OnboardingSetup extends StatelessWidget {
     final settingsStore = context.read<SettingsStore>();
 
     return OnboardingScaffold(
-      header: 'Setup',
-      subtitle:
-          'Let\'s tweak some settings before you get started. You can always change these and more later.',
+      header: context.l10n('Setup'),
+      subtitle: context.l10n.locale.languageCode == 'zh'
+          ? '开始之前先调整一些设置。之后你随时可以在设置中修改。'
+          : 'Let\'s tweak some settings before you get started. You can always change these and more later.',
       content: Observer(
         builder: (context) {
           return ListView(
@@ -33,7 +35,7 @@ class OnboardingSetup extends StatelessWidget {
               ThemeSelectionSetting(settingsStore: settingsStore),
               AccentColorSetting(settingsStore: settingsStore),
               SettingsListSwitch(
-                title: 'Show historical recent messages',
+                title: context.l10n('Load recent messages'),
                 subtitle: Text.rich(
                   TextSpan(
                     text:
@@ -48,11 +50,12 @@ class OnboardingSetup extends StatelessWidget {
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => launchUrl(
-                            Uri.parse('https://recent-messages.robotty.de/'),
-                            mode: settingsStore.launchUrlExternal
-                                ? LaunchMode.externalApplication
-                                : LaunchMode.inAppBrowserView,
-                          ),
+                                Uri.parse(
+                                    'https://recent-messages.robotty.de/'),
+                                mode: settingsStore.launchUrlExternal
+                                    ? LaunchMode.externalApplication
+                                    : LaunchMode.inAppBrowserView,
+                              ),
                       ),
                     ],
                   ),
@@ -62,8 +65,8 @@ class OnboardingSetup extends StatelessWidget {
                     settingsStore.showRecentMessages = newValue,
               ),
               SettingsListSwitch(
-                title: 'Share crash logs and analytics',
-                subtitle: const Text(
+                title: context.l10n('Share crash logs and analytics'),
+                subtitle: Text(
                   'Help improve Frosty by sending anonymous crash logs and analytics through Firebase.',
                 ),
                 value: settingsStore.shareCrashLogsAndAnalytics,

@@ -11,6 +11,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -26,6 +27,7 @@ import 'package:frosty/apis/unauthorized_interceptor.dart';
 import 'package:frosty/cache_manager.dart';
 import 'package:frosty/constants.dart';
 import 'package:frosty/firebase_options.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/channel/channel.dart';
 import 'package:frosty/screens/home/home.dart';
 import 'package:frosty/screens/onboarding/onboarding_intro.dart';
@@ -72,8 +74,7 @@ void main() async {
   FlutterError.onError = (details) {
     // Run the cheap type checks first; only fall back to the diagnostics string
     // (RenderFlex overflow has no typed signal) when those miss.
-    final isNonFatal =
-        _isNonFatalError(details.exception) ||
+    final isNonFatal = _isNonFatalError(details.exception) ||
         details.exceptionAsString().contains('overflowed');
     if (isNonFatal) {
       FirebaseCrashlytics.instance.recordFlutterError(details);
@@ -176,7 +177,8 @@ void main() async {
   dioClient.interceptors.add(UnauthorizedInterceptor(authStore));
 
   await authStore.init();
-  FirebaseCrashlytics.instance.setCustomKey('is_logged_in', authStore.isLoggedIn);
+  FirebaseCrashlytics.instance
+      .setCustomKey('is_logged_in', authStore.isLoggedIn);
   if (authStore.isLoggedIn && authStore.user.details != null) {
     FirebaseCrashlytics.instance.setUserIdentifier(authStore.user.details!.id);
   }
@@ -233,19 +235,28 @@ class _MyAppState extends State<MyApp> {
     return Observer(
       builder: (context) {
         final settingsStore = context.read<SettingsStore>();
+        final locale = Locale(settingsStore.localeCode);
         final themes = FrostyThemes(
           colorSchemeSeed: Color(settingsStore.accentColor),
         );
 
         return MaterialApp(
           title: 'Frosty',
+          locale: locale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
           theme: themes.light,
           darkTheme: themes.dark,
           themeMode: settingsStore.themeType == ThemeType.system
               ? ThemeMode.system
               : settingsStore.themeType == ThemeType.light
-              ? ThemeMode.light
-              : ThemeMode.dark,
+                  ? ThemeMode.light
+                  : ThemeMode.dark,
           navigatorObservers: [
             FirebaseAnalyticsObserver(
               analytics: FirebaseAnalytics.instance,
@@ -268,9 +279,9 @@ class _MyAppState extends State<MyApp> {
       // Handle the initial link if app was opened from a link.
       // Add timeout to prevent indefinite blocking on certain Android lifecycle states.
       final initialLink = await _appLinks.getInitialLink().timeout(
-        const Duration(seconds: 3),
-        onTimeout: () => null,
-      );
+            const Duration(seconds: 3),
+            onTimeout: () => null,
+          );
       if (initialLink != null) {
         handleDeepLink(initialLink);
       }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/settings/stores/settings_store.dart';
 import 'package:frosty/widgets/accent_color_picker_dialog.dart';
 
@@ -12,7 +13,7 @@ class AccentColorSetting extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) => ListTile(
-        title: const Text('Accent color'),
+        title: Text(context.l10n('Accent color')),
         trailing: IconButton(
           icon: DecoratedBox(
             position: DecorationPosition.foreground,

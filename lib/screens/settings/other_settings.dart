@@ -4,6 +4,7 @@ import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/cache_manager.dart';
 import 'package:frosty/screens/settings/stores/settings_store.dart';
 import 'package:frosty/screens/settings/widgets/release_notes.dart';
@@ -22,15 +23,16 @@ class OtherSettings extends StatefulWidget {
 
 class _OtherSettingsState extends State<OtherSettings> {
   Future<void> _showConfirmDialog(BuildContext context) {
+    final t = context.l10n;
     return showDialog(
       context: context,
       builder: (context) => FrostyDialog(
-        title: 'Reset all settings',
-        message: 'Are you sure you want to reset all settings?',
+        title: t('Reset all settings'),
+        message: t('Reset all settings') + '?',
         actions: [
           TextButton(
             onPressed: Navigator.of(context).pop,
-            child: const Text('Cancel'),
+            child: Text(t('Cancel')),
           ),
           FilledButton(
             onPressed: () {
@@ -43,13 +45,13 @@ class _OtherSettingsState extends State<OtherSettings> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: AlertMessage(
-                    message: 'All settings reset',
+                    message: t('All settings reset'),
                     centered: false,
                   ),
                 ),
               );
             },
-            child: const Text('Reset'),
+            child: Text(t('Reset')),
           ),
         ],
       ),
@@ -58,11 +60,12 @@ class _OtherSettingsState extends State<OtherSettings> {
 
   @override
   Widget build(BuildContext context) {
+    final t = context.l10n;
     return Column(
       children: [
         ListTile(
           leading: const Icon(Icons.notes_rounded),
-          title: const Text('Release notes'),
+          title: Text(t('Release notes')),
           onTap: () => Navigator.of(
             context,
           ).push(MaterialPageRoute(
@@ -72,7 +75,7 @@ class _OtherSettingsState extends State<OtherSettings> {
         ),
         ListTile(
           leading: const Icon(Icons.delete_outline_rounded),
-          title: const Text('Clear image cache'),
+          title: Text(t('Clear image cache')),
           onTap: () async {
             HapticFeedback.lightImpact();
 
@@ -84,7 +87,7 @@ class _OtherSettingsState extends State<OtherSettings> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: AlertMessage(
-                  message: 'Image cache cleared',
+                  message: t('Image cache cleared'),
                   centered: false,
                 ),
               ),
@@ -93,13 +96,13 @@ class _OtherSettingsState extends State<OtherSettings> {
         ),
         ListTile(
           leading: const Icon(Icons.restore_rounded),
-          title: const Text('Reset settings'),
+          title: Text(t('Reset settings')),
           onTap: () => _showConfirmDialog(context),
         ),
         Observer(
           builder: (_) => SettingsListSwitch(
-            title: 'Share crash logs and analytics',
-            subtitle: const Text(
+            title: t('Share crash logs and analytics'),
+            subtitle: Text(
               'Help improve Frosty by sending anonymous crash logs and analytics through Firebase.',
             ),
             value: widget.settingsStore.shareCrashLogsAndAnalytics,

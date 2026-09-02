@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/constants.dart';
 import 'package:frosty/screens/settings/stores/settings_store.dart';
 import 'package:frosty/screens/settings/widgets/settings_list_select.dart';
@@ -22,30 +23,27 @@ class ChatSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = context.l10n;
     return Observer(
       builder: (context) => SettingsPageLayout(
         children: [
-          const SectionHeader('General', isFirst: true),
+          SectionHeader(t('General'), isFirst: true),
           SettingsListSwitch(
-            title: 'Keep screen on',
-            subtitle: const Text(
-              'Prevents the screen from sleeping while a channel is open.',
-            ),
+            title: t('Keep screen on'),
+            subtitle: Text(t(
+                'Prevents the screen from sleeping while a channel is open.')),
             value: settingsStore.keepScreenAwake,
-            onChanged: (newValue) =>
-                settingsStore.keepScreenAwake = newValue,
+            onChanged: (newValue) => settingsStore.keepScreenAwake = newValue,
           ),
           SettingsListSwitch(
-            title: 'Autocomplete',
-            subtitle: const Text(
-              'Shows matching emotes and mentions while typing.',
-            ),
+            title: t('Autocomplete'),
+            subtitle:
+                Text(t('Shows matching emotes and mentions while typing.')),
             value: settingsStore.autocomplete,
-            onChanged: (newValue) =>
-                settingsStore.autocomplete = newValue,
+            onChanged: (newValue) => settingsStore.autocomplete = newValue,
           ),
           SettingsListSwitch(
-            title: 'Load recent messages',
+            title: t('Load recent messages'),
             subtitle: Text.rich(
               TextSpan(
                 text:
@@ -60,13 +58,13 @@ class ChatSettings extends StatelessWidget {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => launchUrl(
-                        Uri.parse(
-                          'https://recent-messages.robotty.de/',
-                        ),
-                        mode: settingsStore.launchUrlExternal
-                            ? LaunchMode.externalApplication
-                            : LaunchMode.inAppBrowserView,
-                      ),
+                            Uri.parse(
+                              'https://recent-messages.robotty.de/',
+                            ),
+                            mode: settingsStore.launchUrlExternal
+                                ? LaunchMode.externalApplication
+                                : LaunchMode.inAppBrowserView,
+                          ),
                   ),
                 ],
               ),
@@ -75,9 +73,9 @@ class ChatSettings extends StatelessWidget {
             onChanged: (newValue) =>
                 settingsStore.showRecentMessages = newValue,
           ),
-          const SectionHeader('Message sizing'),
+          SectionHeader(t('Message sizing')),
           ExpansionTile(
-            title: const Text('Preview'),
+            title: Text(t('Preview')),
             children: [
               Container(
                 width: double.infinity,
@@ -98,11 +96,9 @@ class ChatSettings extends StatelessWidget {
                                 imageUrl:
                                     'https://static-cdn.jtvnw.net/badges/v1/bbbe0db0-a598-423e-86d0-f9fb98ca1933/3',
                                 height:
-                                    defaultBadgeSize *
-                                    settingsStore.badgeScale,
+                                    defaultBadgeSize * settingsStore.badgeScale,
                                 width:
-                                    defaultBadgeSize *
-                                    settingsStore.badgeScale,
+                                    defaultBadgeSize * settingsStore.badgeScale,
                               ),
                             ),
                             const TextSpan(
@@ -114,11 +110,9 @@ class ChatSettings extends StatelessWidget {
                                 imageUrl:
                                     'https://static-cdn.jtvnw.net/emoticons/v2/425618/default/dark/3.0',
                                 height:
-                                    defaultEmoteSize *
-                                    settingsStore.emoteScale,
+                                    defaultEmoteSize * settingsStore.emoteScale,
                                 width:
-                                    defaultEmoteSize *
-                                    settingsStore.emoteScale,
+                                    defaultEmoteSize * settingsStore.emoteScale,
                               ),
                             ),
                           ],
@@ -142,7 +136,7 @@ class ChatSettings extends StatelessWidget {
             ],
           ),
           SettingsListSlider(
-            title: 'Badge scale',
+            title: t('Badge scale'),
             trailing: '${settingsStore.badgeScale.toStringAsFixed(2)}x',
             value: settingsStore.badgeScale,
             min: 0.25,
@@ -151,7 +145,7 @@ class ChatSettings extends StatelessWidget {
             onChanged: (newValue) => settingsStore.badgeScale = newValue,
           ),
           SettingsListSlider(
-            title: 'Emote scale',
+            title: t('Emote scale'),
             trailing: '${settingsStore.emoteScale.toStringAsFixed(2)}x',
             value: settingsStore.emoteScale,
             min: 0.25,
@@ -160,7 +154,7 @@ class ChatSettings extends StatelessWidget {
             onChanged: (newValue) => settingsStore.emoteScale = newValue,
           ),
           SettingsListSlider(
-            title: 'Message scale',
+            title: t('Message scale'),
             trailing: '${settingsStore.messageScale.toStringAsFixed(2)}x',
             value: settingsStore.messageScale,
             min: 0.5,
@@ -169,17 +163,15 @@ class ChatSettings extends StatelessWidget {
             onChanged: (newValue) => settingsStore.messageScale = newValue,
           ),
           SettingsListSlider(
-            title: 'Message spacing',
-            trailing:
-                '${settingsStore.messageSpacing.toStringAsFixed(0)}px',
+            title: t('Message spacing'),
+            trailing: '${settingsStore.messageSpacing.toStringAsFixed(0)}px',
             value: settingsStore.messageSpacing,
             max: 30.0,
             divisions: 15,
-            onChanged: (newValue) =>
-                settingsStore.messageSpacing = newValue,
+            onChanged: (newValue) => settingsStore.messageSpacing = newValue,
           ),
           SettingsListSlider(
-            title: 'Font size',
+            title: t('Font size'),
             trailing: settingsStore.fontSize.toInt().toString(),
             value: settingsStore.fontSize,
             min: 5,
@@ -187,32 +179,30 @@ class ChatSettings extends StatelessWidget {
             divisions: 15,
             onChanged: (newValue) => settingsStore.fontSize = newValue,
           ),
-          const SectionHeader('Message appearance'),
+          SectionHeader(t('Message appearance')),
           SettingsListSwitch(
-            title: 'Show deleted messages',
-            subtitle: const Text(
-              'Restores the original message of deleted messages.',
-            ),
+            title: t('Show deleted messages'),
+            subtitle:
+                Text(t('Restores the original message of deleted messages.')),
             value: settingsStore.showDeletedMessages,
             onChanged: (newValue) =>
                 settingsStore.showDeletedMessages = newValue,
           ),
           SettingsListSwitch(
-            title: 'Show message dividers',
+            title: t('Show message dividers'),
             value: settingsStore.showChatMessageDividers,
             onChanged: (newValue) =>
                 settingsStore.showChatMessageDividers = newValue,
           ),
           SettingsListSelect(
-            title: 'Timestamps',
-            selectedOption:
-                timestampNames[settingsStore.timestampType.index],
+            title: t('Timestamps'),
+            selectedOption: timestampNames[settingsStore.timestampType.index],
             options: timestampNames,
             onChanged: (newValue) => settingsStore.timestampType =
                 TimestampType.values[timestampNames.indexOf(newValue)],
           ),
           SettingsListSwitch(
-            title: 'Show timestamps on historical messages',
+            title: t('Show timestamps on historical messages'),
             subtitle: const Text(
               'Always show timestamps on messages loaded from chat history, '
               'even when timestamps are disabled above.',
@@ -222,7 +212,7 @@ class ChatSettings extends StatelessWidget {
                 settingsStore.showHistoricalTimestamps = newValue,
           ),
           SettingsListSwitch(
-            title: 'Focus current channel',
+            title: t('Focus current channel'),
             subtitle: const Text(
               'Fades messages from other channels in merged chat, '
               'so the current channel stands out.',
@@ -231,56 +221,49 @@ class ChatSettings extends StatelessWidget {
             onChanged: (newValue) =>
                 settingsStore.focusCurrentChannel = newValue,
           ),
-          const SectionHeader('Delay'),
+          SectionHeader(t('Delay')),
           SettingsListSwitch(
-            title: 'Auto-sync chat delay',
+            title: t('Auto-sync chat delay'),
             value: settingsStore.autoSyncChatDelay,
-            onChanged: (newValue) =>
-                settingsStore.autoSyncChatDelay = newValue,
+            onChanged: (newValue) => settingsStore.autoSyncChatDelay = newValue,
           ),
           if (!settingsStore.autoSyncChatDelay)
             SettingsListSlider(
-              title: 'Chat delay',
+              title: t('Chat delay'),
               trailing: '${settingsStore.chatDelay.toInt()} seconds',
               subtitle:
                   'Adds a delay before each message is rendered in chat. ${Platform.isIOS ? '15 seconds is recommended for iOS.' : ''}',
               value: settingsStore.chatDelay,
               max: 30.0,
               divisions: 30,
-              onChanged: (newValue) =>
-                  settingsStore.chatDelay = newValue,
+              onChanged: (newValue) => settingsStore.chatDelay = newValue,
             ),
-          const SectionHeader('Alerts'),
+          SectionHeader(t('Alerts')),
           SettingsListSwitch(
-            title: 'Highlight first-time chatters',
+            title: t('Highlight first-time chatters'),
             value: settingsStore.highlightFirstTimeChatter,
             onChanged: (newValue) =>
                 settingsStore.highlightFirstTimeChatter = newValue,
           ),
           SettingsListSwitch(
-            title: 'Show notices',
-            subtitle: const Text(
-              'Shows notices such as subs, announcements, and raids.',
-            ),
+            title: t('Show notices'),
+            subtitle: Text(
+                t('Shows notices such as subs, announcements, and raids.')),
             value: settingsStore.showUserNotices,
-            onChanged: (newValue) =>
-                settingsStore.showUserNotices = newValue,
+            onChanged: (newValue) => settingsStore.showUserNotices = newValue,
           ),
-          const SectionHeader('Layout'),
+          SectionHeader(t('Layout')),
           SettingsListSwitch(
-            title: 'Emote menu on left',
-            subtitle: const Text(
-              'Places the emote menu button on the left side.',
-            ),
+            title: t('Emote menu on left'),
+            subtitle: Text(t('Places the emote menu button on the left side.')),
             value: settingsStore.emoteMenuButtonOnLeft,
             onChanged: (newValue) =>
                 settingsStore.emoteMenuButtonOnLeft = newValue,
           ),
           SettingsListSwitch(
-            title: 'Remember chat tabs',
-            subtitle: const Text(
-              'Secondary chat tabs are kept when switching channels.',
-            ),
+            title: t('Remember chat tabs'),
+            subtitle: Text(
+                t('Secondary chat tabs are kept when switching channels.')),
             value: settingsStore.persistChatTabs,
             onChanged: (newValue) {
               settingsStore.persistChatTabs = newValue;
@@ -289,98 +272,85 @@ class ChatSettings extends StatelessWidget {
               }
             },
           ),
-          const SectionHeader('Landscape'),
+          SectionHeader(t('Landscape')),
           SettingsListSwitch(
-            title: 'Chat on left side',
+            title: t('Chat on left side'),
             value: settingsStore.landscapeChatLeftSide,
             onChanged: (newValue) =>
                 settingsStore.landscapeChatLeftSide = newValue,
           ),
           SettingsListSwitch(
-            title: 'Force vertical chat',
-            subtitle: const Text(
-              'Intended for tablets and larger displays.',
-            ),
+            title: t('Force vertical chat'),
+            subtitle: Text(t('Intended for tablets and larger displays.')),
             value: settingsStore.landscapeForceVerticalChat,
             onChanged: (newValue) =>
                 settingsStore.landscapeForceVerticalChat = newValue,
           ),
           SettingsListSelect(
-            title: 'Notch fill',
-            subtitle:
-                'Fills the display cutout area on the selected side.',
+            title: t('Notch fill'),
+            subtitle: 'Fills the display cutout area on the selected side.',
             selectedOption:
                 landscapeCutoutNames[settingsStore.landscapeCutout.index],
             options: landscapeCutoutNames,
             onChanged: (newValue) => settingsStore.landscapeCutout =
                 LandscapeCutoutType.values[landscapeCutoutNames.indexOf(
-                  newValue,
-                )],
+              newValue,
+            )],
           ),
           SettingsListSlider(
-            title: 'Overlay chat opacity',
+            title: t('Overlay chat opacity'),
             trailing:
                 '${(settingsStore.fullScreenChatOverlayOpacity * 100).toStringAsFixed(0)}%',
-            subtitle:
-                'Opacity of the chat overlay in fullscreen mode.',
+            subtitle: 'Opacity of the chat overlay in fullscreen mode.',
             value: settingsStore.fullScreenChatOverlayOpacity,
             divisions: 10,
             onChanged: (newValue) =>
                 settingsStore.fullScreenChatOverlayOpacity = newValue,
           ),
-          const SectionHeader('Filtering'),
+          SectionHeader(t('Filtering')),
           SettingsMutedWords(settingsStore: settingsStore),
           SettingsListSwitch(
-            title: 'Match whole words',
-            subtitle: const Text(
-              'Only matches whole words instead of partial matches.',
-            ),
+            title: t('Match whole words'),
+            subtitle:
+                Text(t('Only matches whole words instead of partial matches.')),
             value: settingsStore.matchWholeWord,
-            onChanged: (newValue) =>
-                settingsStore.matchWholeWord = newValue,
+            onChanged: (newValue) => settingsStore.matchWholeWord = newValue,
           ),
-          const SectionHeader('Emotes and badges'),
+          SectionHeader(t('Emotes and badges')),
           SettingsListSwitch(
-            title: 'Twitch emotes',
+            title: t('Twitch emotes'),
             value: settingsStore.showTwitchEmotes,
-            onChanged: (newValue) =>
-                settingsStore.showTwitchEmotes = newValue,
+            onChanged: (newValue) => settingsStore.showTwitchEmotes = newValue,
           ),
           SettingsListSwitch(
-            title: 'Twitch badges',
+            title: t('Twitch badges'),
             value: settingsStore.showTwitchBadges,
-            onChanged: (newValue) =>
-                settingsStore.showTwitchBadges = newValue,
+            onChanged: (newValue) => settingsStore.showTwitchBadges = newValue,
           ),
           SettingsListSwitch(
-            title: '7TV emotes',
+            title: t('7TV emotes'),
             value: settingsStore.show7TVEmotes,
-            onChanged: (newValue) =>
-                settingsStore.show7TVEmotes = newValue,
+            onChanged: (newValue) => settingsStore.show7TVEmotes = newValue,
           ),
           SettingsListSwitch(
-            title: 'BTTV emotes',
+            title: t('BTTV emotes'),
             value: settingsStore.showBTTVEmotes,
-            onChanged: (newValue) =>
-                settingsStore.showBTTVEmotes = newValue,
+            onChanged: (newValue) => settingsStore.showBTTVEmotes = newValue,
           ),
           SettingsListSwitch(
-            title: 'BTTV badges',
+            title: t('BTTV badges'),
             value: settingsStore.showBTTVBadges,
-            onChanged: (newValue) =>
-                settingsStore.showBTTVBadges = newValue,
+            onChanged: (newValue) => settingsStore.showBTTVBadges = newValue,
           ),
           SettingsListSwitch(
-            title: 'FFZ emotes',
+            title: t('FFZ emotes'),
             value: settingsStore.showFFZEmotes,
-            onChanged: (newValue) =>
-                settingsStore.showFFZEmotes = newValue,
+            onChanged: (newValue) => settingsStore.showFFZEmotes = newValue,
           ),
           SettingsListSwitch(
-            title: 'FFZ badges',
+            title: t('FFZ badges'),
             value: settingsStore.showFFZBadges,
-            onChanged: (newValue) =>
-                settingsStore.showFFZBadges = newValue,
+            onChanged: (newValue) => settingsStore.showFFZBadges = newValue,
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/settings/account/widgets/profile_card.dart';
 import 'package:frosty/screens/settings/chat_settings.dart';
 import 'package:frosty/screens/settings/general_settings.dart';
@@ -26,6 +27,7 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final t = context.l10n;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -43,26 +45,26 @@ class Settings extends StatelessWidget {
               : Brightness.dark,
         ),
         leading: IconButton(
-          tooltip: 'Back',
+          tooltip: t('Back'),
           icon: Icon(Icons.adaptive.arrow_back_rounded),
           onPressed: Navigator.of(context).pop,
         ),
-        title: const Text('Settings'),
+        title: Text(t('Settings')),
         actions: [
           IconButton(
-              tooltip: 'Support Frosty',
-              onPressed: () => launchUrl(
-                Uri.parse('https://www.buymeacoffee.com/tommychow'),
-                mode: settingsStore.launchUrlExternal
-                    ? LaunchMode.externalApplication
-                    : LaunchMode.inAppBrowserView,
-              ),
-              icon: const Icon(SimpleIcons.buymeacoffee),
+            tooltip: t('Support Frosty'),
+            onPressed: () => launchUrl(
+              Uri.parse('https://www.buymeacoffee.com/tommychow'),
+              mode: settingsStore.launchUrlExternal
+                  ? LaunchMode.externalApplication
+                  : LaunchMode.inAppBrowserView,
             ),
+            icon: const Icon(SimpleIcons.buymeacoffee),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: IconButton(
-              tooltip: 'View source on GitHub',
+              tooltip: t('View source on GitHub'),
               onPressed: () => launchUrl(
                 Uri.parse('https://github.com/tommyxchow/frosty'),
                 mode: settingsStore.launchUrlExternal
@@ -85,125 +87,125 @@ class Settings extends StatelessWidget {
                 top: MediaQuery.of(context).padding.top + kToolbarHeight,
               ),
               child: CustomScrollView(
-              slivers: [
-                SliverPadding(
-                  padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top +
-                        kToolbarHeight +
-                        8,
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top +
+                          kToolbarHeight +
+                          8,
+                    ),
+                    sliver: SliverList.list(
+                      children: [
+                        SectionHeader(t('Account'), isFirst: true),
+                        ProfileCard(authStore: context.read<AuthStore>()),
+                        SectionHeader(t('Customize')),
+                        SettingsTileRoute(
+                          leading: const Icon(Icons.settings_outlined),
+                          title: t('General'),
+                          child: GeneralSettings(settingsStore: settingsStore),
+                        ),
+                        SettingsTileRoute(
+                          leading: const Icon(Icons.tv_rounded),
+                          title: t('Video'),
+                          child: VideoSettings(settingsStore: settingsStore),
+                        ),
+                        SettingsTileRoute(
+                          leading: const Icon(Icons.chat_outlined),
+                          title: t('Chat'),
+                          child: ChatSettings(settingsStore: settingsStore),
+                        ),
+                        SectionHeader(t('Other')),
+                        OtherSettings(settingsStore: settingsStore),
+                      ],
+                    ),
                   ),
-                  sliver: SliverList.list(
-                    children: [
-                      const SectionHeader('Account', isFirst: true),
-                      ProfileCard(authStore: context.read<AuthStore>()),
-                      const SectionHeader('Customize'),
-                      SettingsTileRoute(
-                        leading: const Icon(Icons.settings_outlined),
-                        title: 'General',
-                        child: GeneralSettings(settingsStore: settingsStore),
-                      ),
-                      SettingsTileRoute(
-                        leading: const Icon(Icons.tv_rounded),
-                        title: 'Video',
-                        child: VideoSettings(settingsStore: settingsStore),
-                      ),
-                      SettingsTileRoute(
-                        leading: const Icon(Icons.chat_outlined),
-                        title: 'Chat',
-                        child: ChatSettings(settingsStore: settingsStore),
-                      ),
-                      const SectionHeader('Other'),
-                      OtherSettings(settingsStore: settingsStore),
-                    ],
-                  ),
-                ),
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: FutureBuilder<PackageInfo>(
-                      future: PackageInfo.fromPlatform(),
-                      builder: (context, snapshot) {
-                        final version = snapshot.data?.version ?? '';
-                        final buildNumber = snapshot.data?.buildNumber ?? '';
-                        final mutedColor = theme.colorScheme.onSurfaceVariant
-                            .withValues(alpha: 0.5);
-                        return Padding(
-                          padding: EdgeInsets.only(
-                            top: 16,
-                            bottom: MediaQuery.of(context).padding.bottom,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text.rich(
-                                TextSpan(
-                                  style:
-                                      theme.textTheme.bodySmall?.copyWith(
-                                    color: mutedColor,
-                                  ),
-                                  children: [
-                                    const TextSpan(text: 'Made by '),
-                                    WidgetSpan(
-                                      alignment:
-                                          PlaceholderAlignment.baseline,
-                                      baseline: TextBaseline.alphabetic,
-                                      child: GestureDetector(
-                                        onTap: () => launchUrl(
-                                          Uri.parse(
-                                            'https://tommychow.com',
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: FutureBuilder<PackageInfo>(
+                        future: PackageInfo.fromPlatform(),
+                        builder: (context, snapshot) {
+                          final version = snapshot.data?.version ?? '';
+                          final buildNumber = snapshot.data?.buildNumber ?? '';
+                          final mutedColor = theme.colorScheme.onSurfaceVariant
+                              .withValues(alpha: 0.5);
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              top: 16,
+                              bottom: MediaQuery.of(context).padding.bottom,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: mutedColor,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                          text: settingsStore.localeCode == 'zh'
+                                              ? '制作：'
+                                              : 'Made by '),
+                                      WidgetSpan(
+                                        alignment:
+                                            PlaceholderAlignment.baseline,
+                                        baseline: TextBaseline.alphabetic,
+                                        child: GestureDetector(
+                                          onTap: () => launchUrl(
+                                            Uri.parse(
+                                              'https://tommychow.com',
+                                            ),
+                                            mode: settingsStore
+                                                    .launchUrlExternal
+                                                ? LaunchMode.externalApplication
+                                                : LaunchMode.inAppBrowserView,
                                           ),
-                                          mode: settingsStore
-                                                  .launchUrlExternal
-                                              ? LaunchMode
-                                                  .externalApplication
-                                              : LaunchMode
-                                                  .inAppBrowserView,
-                                        ),
-                                        child: Text(
-                                          'Tommy Chow',
-                                          style: theme.textTheme.bodySmall
-                                              ?.copyWith(
-                                            color: mutedColor,
-                                            decoration:
-                                                TextDecoration.underline,
-                                            decorationColor: mutedColor,
+                                          child: Text(
+                                            'Tommy Chow',
+                                            style: theme.textTheme.bodySmall
+                                                ?.copyWith(
+                                              color: mutedColor,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              decorationColor: mutedColor,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              if (snapshot.hasData)
-                                GestureDetector(
-                                  onTap: () => launchUrl(
-                                    Uri.parse(
-                                      'https://github.com/tommyxchow/frosty/releases/tag/v$version',
-                                    ),
-                                    mode: settingsStore.launchUrlExternal
-                                        ? LaunchMode.externalApplication
-                                        : LaunchMode.inAppBrowserView,
-                                  ),
-                                  child: Text(
-                                    'v$version ($buildNumber)',
-                                    style:
-                                        theme.textTheme.bodySmall?.copyWith(
-                                      color: mutedColor,
-                                    ),
+                                    ],
                                   ),
                                 ),
-                            ],
-                          ),
-                        );
-                      },
+                                const SizedBox(height: 4),
+                                if (snapshot.hasData)
+                                  GestureDetector(
+                                    onTap: () => launchUrl(
+                                      Uri.parse(
+                                        'https://github.com/tommyxchow/frosty/releases/tag/v$version',
+                                      ),
+                                      mode: settingsStore.launchUrlExternal
+                                          ? LaunchMode.externalApplication
+                                          : LaunchMode.inAppBrowserView,
+                                    ),
+                                    child: Text(
+                                      'v$version ($buildNumber)',
+                                      style:
+                                          theme.textTheme.bodySmall?.copyWith(
+                                        color: mutedColor,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
           ),
           // Blurred app bar overlay
           Positioned(

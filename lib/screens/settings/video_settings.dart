@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/settings/stores/settings_store.dart';
 import 'package:frosty/screens/settings/widgets/settings_list_switch.dart';
 import 'package:frosty/utils.dart';
@@ -15,65 +16,59 @@ class VideoSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = context.l10n;
     return Observer(
       builder: (context) => SettingsPageLayout(
         children: [
-          const SectionHeader('Player', isFirst: true),
+          SectionHeader(t('Player'), isFirst: true),
           SettingsListSwitch(
-            title: 'Show video player',
+            title: t('Show video player'),
             value: settingsStore.showVideo,
             onChanged: (newValue) => settingsStore.showVideo = newValue,
           ),
           if (settingsStore.showVideo)
             SettingsListSwitch(
-              title: 'Native player',
-              subtitle: const Text(
-                'Picture-in-Picture, quality selection, and lower latency. Turn off to use the legacy WebView player.',
-              ),
+              title: t('Native player'),
+              subtitle: Text(t(
+                  'Picture-in-Picture, quality selection, and lower latency. Turn off to use the legacy WebView player.')),
               value: settingsStore.useNativePlayer,
-              onChanged: (newValue) =>
-                  settingsStore.useNativePlayer = newValue,
+              onChanged: (newValue) => settingsStore.useNativePlayer = newValue,
             ),
           if (!Platform.isIOS || isIPad())
             SettingsListSwitch(
-              title: 'Default to highest quality',
+              title: t('Default to highest quality'),
               value: settingsStore.defaultToHighestQuality,
               onChanged: (newValue) =>
                   settingsStore.defaultToHighestQuality = newValue,
             ),
           if (Platform.isAndroid)
             SettingsListSwitch(
-              title: 'Use fast video rendering',
-              subtitle: const Text(
-                'Uses a faster WebView rendering method. Disable if you experience crashes while watching streams.',
-              ),
+              title: t('Use fast video rendering'),
+              subtitle: Text(t(
+                  'Uses a faster WebView rendering method. Disable if you experience crashes while watching streams.')),
               value: settingsStore.useTextureRendering,
               onChanged: (newValue) =>
                   settingsStore.useTextureRendering = newValue,
             ),
-          const SectionHeader('Overlay'),
+          SectionHeader(t('Overlay')),
           SettingsListSwitch(
-            title: 'Use custom video overlay',
-            subtitle: const Text(
-              'Replaces Twitch\'s default web overlay with a mobile-friendly version.',
-            ),
+            title: t('Use custom video overlay'),
+            subtitle: Text(t(
+                'Replaces Twitch\'s default web overlay with a mobile-friendly version.')),
             value: settingsStore.showOverlay,
             onChanged: (newValue) => settingsStore.showOverlay = newValue,
           ),
           SettingsListSwitch(
-            title: 'Toggle overlay on long-press',
-            subtitle: const Text(
-              'Switch between Twitch\'s overlay and the custom overlay.',
-            ),
+            title: t('Toggle overlay on long-press'),
+            subtitle: Text(
+                t('Switch between Twitch\'s overlay and the custom overlay.')),
             value: settingsStore.toggleableOverlay,
-            onChanged: (newValue) =>
-                settingsStore.toggleableOverlay = newValue,
+            onChanged: (newValue) => settingsStore.toggleableOverlay = newValue,
           ),
           SettingsListSwitch(
-            title: 'Show latency',
-            subtitle: const Text(
-              'Displays the stream latency in the video overlay.',
-            ),
+            title: t('Show latency'),
+            subtitle:
+                Text(t('Displays the stream latency in the video overlay.')),
             value: settingsStore.showLatency,
             onChanged: (newValue) => settingsStore.showLatency = newValue,
           ),

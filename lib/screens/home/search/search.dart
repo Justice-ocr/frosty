@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frosty/apis/twitch_api.dart';
 import 'package:frosty/screens/home/search/search_results_categories.dart';
@@ -48,8 +49,7 @@ class _SearchState extends State<Search> {
                     slivers: [
                       SliverToBoxAdapter(
                         child: SizedBox(
-                          height:
-                              MediaQuery.of(context).padding.top +
+                          height: MediaQuery.of(context).padding.top +
                               _kSearchBarHeight,
                         ),
                       ),
@@ -78,8 +78,7 @@ class _SearchState extends State<Search> {
                   child: ListView(
                     controller: widget.scrollController,
                     padding: EdgeInsets.only(
-                      top:
-                          MediaQuery.of(context).padding.top +
+                      top: MediaQuery.of(context).padding.top +
                           _kSearchBarHeight,
                       bottom: MediaQuery.of(context).padding.bottom,
                     ),
@@ -99,7 +98,7 @@ class _SearchState extends State<Search> {
                             ),
                             TextButton(
                               onPressed: _searchStore.searchHistory.clear,
-                              child: const Text('Clear'),
+                              child: Text(context.l10n('Clear')),
                             ),
                           ],
                         ),
@@ -114,13 +113,11 @@ class _SearchState extends State<Search> {
                             _searchStore.handleQuery(searchTerm);
                             _searchStore.textEditingController.selection =
                                 TextSelection.fromPosition(
-                                  TextPosition(
-                                    offset: _searchStore
-                                        .textEditingController
-                                        .text
-                                        .length,
-                                  ),
-                                );
+                              TextPosition(
+                                offset: _searchStore
+                                    .textEditingController.text.length,
+                              ),
+                            );
                           },
                         ),
                       ),
@@ -204,9 +201,10 @@ class _SearchState extends State<Search> {
                         onChanged: _searchStore.onSearchTextChanged,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.search_rounded),
-                          hintText: 'Search channels or categories',
-                          suffixIcon:
-                              _searchStore.textFieldFocusNode.hasFocus ||
+                          hintText:
+                              context.l10n('Search channels or categories'),
+                          suffixIcon: _searchStore
+                                      .textFieldFocusNode.hasFocus ||
                                   _searchStore.searchText.isNotEmpty
                               ? IconButton(
                                   icon: const Icon(Icons.close_rounded),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/home/home_store.dart';
 import 'package:frosty/screens/home/search/search.dart';
 import 'package:frosty/screens/home/stream_list/stream_list_store.dart';
@@ -62,6 +63,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final t = context.l10n;
 
     return GestureDetector(
       onTap: FocusScope.of(context).unfocus,
@@ -98,9 +100,9 @@ class _HomeState extends State<Home> {
           title: Observer(
             builder: (_) {
               final titles = [
-                if (_authStore.isLoggedIn) 'Following',
-                'Top',
-                'Search',
+                if (_authStore.isLoggedIn) t('Following'),
+                t('Top'),
+                t('Search'),
               ];
 
               return Text(titles[_homeStore.selectedIndex]);
@@ -114,7 +116,7 @@ class _HomeState extends State<Home> {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: IconButton(
-                    tooltip: 'Settings',
+                    tooltip: t('Settings'),
                     icon: isLoggedIn
                         ? ProfilePicture(
                             userLogin: _authStore.user.details!.login,
@@ -173,8 +175,8 @@ class _HomeState extends State<Home> {
                         Icons.favorite_rounded,
                         color: theme.colorScheme.primary,
                       ),
-                      label: 'Following',
-                      tooltip: 'Following',
+                      label: t('Following'),
+                      tooltip: t('Following'),
                     ),
                   NavigationDestination(
                     icon: Icon(
@@ -186,8 +188,8 @@ class _HomeState extends State<Home> {
                       Icons.arrow_upward_rounded,
                       color: theme.colorScheme.primary,
                     ),
-                    label: 'Top',
-                    tooltip: 'Top',
+                    label: t('Top'),
+                    tooltip: t('Top'),
                   ),
                   NavigationDestination(
                     icon: Icon(
@@ -199,8 +201,8 @@ class _HomeState extends State<Home> {
                       Icons.search_rounded,
                       color: theme.colorScheme.primary,
                     ),
-                    label: 'Search',
-                    tooltip: 'Search',
+                    label: t('Search'),
+                    tooltip: t('Search'),
                   ),
                 ],
                 selectedIndex: _homeStore.selectedIndex,

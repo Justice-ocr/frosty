@@ -18,6 +18,12 @@ class SettingsStore extends _SettingsStoreBase with _$SettingsStore {
 
 abstract class _SettingsStoreBase with Store {
   // * General Settings
+  @JsonKey(defaultValue: 'zh')
+  @observable
+  var localeCode = 'zh';
+
+  void setLocale(String code) => localeCode = code;
+
   // Theme defaults
   static const defaultThemeType = ThemeType.system;
   static const defaultAccentColor = 0xff9146ff;
@@ -54,6 +60,7 @@ abstract class _SettingsStoreBase with Store {
 
   @action
   void resetGeneralSettings() {
+    localeCode = 'zh';
     themeType = defaultThemeType;
     accentColor = defaultAccentColor;
 

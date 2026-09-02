@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // import removed: flutter_colorpicker
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/settings/stores/settings_store.dart';
 import 'package:frosty/screens/settings/widgets/settings_list_switch.dart';
 import 'package:frosty/widgets/accent_color_setting.dart';
@@ -17,24 +18,35 @@ class GeneralSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = context.l10n;
     return Observer(
       builder: (context) => SettingsPageLayout(
         children: [
-          const SectionHeader('Theme', isFirst: true),
+          SectionHeader(t('Theme'), isFirst: true),
+          SettingsListSelect(
+            title: t('Language'),
+            selectedOption: settingsStore.localeCode == 'zh'
+                ? t('Chinese (Simplified)')
+                : t('English'),
+            options: [t('Chinese (Simplified)'), t('English')],
+            onChanged: (value) => settingsStore.setLocale(
+              value == t('Chinese (Simplified)') ? 'zh' : 'en',
+            ),
+          ),
           ThemeSelectionSetting(settingsStore: settingsStore),
           AccentColorSetting(settingsStore: settingsStore),
-          const SectionHeader('Stream card'),
+          SectionHeader(t('Stream card')),
           SettingsListSwitch(
-            title: 'Large stream cards',
+            title: t('Large stream cards'),
             value: settingsStore.largeStreamCard,
             onChanged: (newValue) => settingsStore.largeStreamCard = newValue,
           ),
           SettingsListSwitch(
-            title: 'Show thumbnails',
+            title: t('Show thumbnails'),
             value: settingsStore.showThumbnails,
             onChanged: (newValue) => settingsStore.showThumbnails = newValue,
           ),
-          const SectionHeader('Links'),
+          SectionHeader(t('Links')),
           ExternalBrowserSetting(settingsStore: settingsStore),
         ],
       ),

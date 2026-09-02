@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScaffold extends StatelessWidget {
@@ -121,7 +122,7 @@ class OnboardingScaffold extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => route),
                         ),
                   icon: buttonIcon ?? const SizedBox(),
-                  label: Text(buttonText ?? 'Next'),
+                  label: Text(buttonText ?? context.l10n('Next')),
                 ),
               ),
               if (skipRoute != null)
@@ -133,7 +134,7 @@ class OnboardingScaffold extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (context) => skipRoute!),
                     ),
-                    child: const Text('Skip'),
+                    child: Text(context.l10n('Skip')),
                   ),
                 ),
             ],
