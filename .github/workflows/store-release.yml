@@ -17,6 +17,9 @@ env:
   LANG: en_US.UTF-8
 jobs:
   android:
+    # Store publishing belongs to the upstream repository. Fork releases use
+    # the GitHub APK workflow and must not require upstream signing secrets.
+    if: github.repository == 'tommyxchow/frosty'
     name: Build and release Frosty on Android
     runs-on: ubuntu-latest
     environment: release-android
@@ -72,6 +75,7 @@ jobs:
       - name: Deploy with fastlane
         run: cd android && bundle exec fastlane deploy
   ios:
+    if: github.repository == 'tommyxchow/frosty'
     name: Build and release Frosty on iOS
     runs-on: macos-latest
     environment: release-ios

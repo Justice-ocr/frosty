@@ -35,17 +35,36 @@ jobs:
           flutter-version-file: pubspec.yaml
           cache: true
       
-      # Decode and create the upload-keystore.jks file, used for signing the app.
+      # Decode the upload key when the fork has a valid one. Forks without the
+      # upstream signing secret fall back to the debug key so GitHub Releases
+      # still provide an installable APK.
       - name: Decode and create upload-keystore.jks
-        run: echo $UPLOAD_KEYSTORE | base64 --decode > $GITHUB_WORKSPACE/android/upload-keystore.jks
-      
+        run: |
+          set +e
+          if [ -n "$UPLOAD_KEYSTORE" ]; then
+            printf '%s' "$UPLOAD_KEYSTORE" | base64 --decode > "$GITHUB_WORKSPACE/android/upload-keystore.jks"
+            keytool -list -keystore "$GITHUB_WORKSPACE/android/upload-keystore.jks" \
+              -storepass "$STORE_PASSWORD" >/dev/null 2>&1
+            if [ $? -eq 0 ]; then
+              echo "UPLOAD_KEYSTORE_VALID=true" >> "$GITHUB_ENV"
+            else
+              rm -f "$GITHUB_WORKSPACE/android/upload-keystore.jks"
+            fi
+          fi
+          if [ "$UPLOAD_KEYSTORE_VALID" != "true" ]; then
+            echo "ALLOW_DEBUG_SIGNED_RELEASE=1" >> "$GITHUB_ENV"
+            echo "No valid upload keystore was provided; using debug signing for the GitHub APK."
+          fi
+
       # Create the key.properties file, used for signing the app.
       - name: Create key.properties
         run: |
-          echo storePassword=$STORE_PASSWORD >> $KEY_FILE_PATH
-          echo keyPassword=$KEY_PASSWORD >> $KEY_FILE_PATH
-          echo keyAlias=upload >> $KEY_FILE_PATH
-          echo storeFile=$GITHUB_WORKSPACE/android/upload-keystore.jks >> $KEY_FILE_PATH
+          if [ "$UPLOAD_KEYSTORE_VALID" = "true" ]; then
+            echo storePassword=$STORE_PASSWORD >> $KEY_FILE_PATH
+            echo keyPassword=$KEY_PASSWORD >> $KEY_FILE_PATH
+            echo keyAlias=upload >> $KEY_FILE_PATH
+            echo storeFile=$GITHUB_WORKSPACE/android/upload-keystore.jks >> $KEY_FILE_PATH
+          fi
       
       # Build the APK with the environment variables and move/rename it.
       - name: Build for Android
