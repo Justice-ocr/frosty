@@ -5,6 +5,12 @@ on:
   push:
     tags:
       - v*.*.*
+
+# Forks need an explicit write scope for the workflow token to create and
+# update GitHub Releases with the APK artifact.
+permissions:
+  contents: write
+
 jobs:
   android:
     name: Draft release and attach APK
