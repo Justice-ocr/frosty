@@ -26,12 +26,14 @@ class VideoOverlay extends StatelessWidget {
   final VideoPlayerInterface videoStore;
   final ChatStore chatStore;
   final SettingsStore settingsStore;
+  final VoidCallback? onOpenAudioOnly;
 
   const VideoOverlay({
     super.key,
     required this.videoStore,
     required this.chatStore,
     required this.settingsStore,
+    this.onOpenAudioOnly,
   });
 
   static BoxDecoration _overlayGradient({required bool fromTop}) =>
@@ -495,6 +497,19 @@ class VideoOverlay extends StatelessWidget {
                           ),
                         ),
                       ),
+                      if (onOpenAudioOnly != null)
+                        Tooltip(
+                          message: '听视频',
+                          preferBelow: false,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.headphones_rounded,
+                              color: surfaceColor,
+                              shadows: kOverlayShadow,
+                            ),
+                            onPressed: onOpenAudioOnly,
+                          ),
+                        ),
                       Builder(
                         builder: (_) {
                           // On iOS, show toggle behavior. On Android, always show enter PiP.

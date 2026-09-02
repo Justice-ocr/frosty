@@ -6,6 +6,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frosty/screens/channel/chat/stores/chat_store.dart';
 import 'package:frosty/screens/channel/chat/stores/chat_tabs_store.dart';
 import 'package:frosty/screens/channel/chat/widgets/chat_tabs.dart';
+import 'package:frosty/screens/channel/audio_only/audio_only_page.dart';
 import 'package:frosty/screens/channel/video/native_video.dart';
 import 'package:frosty/screens/channel/video/native_video_store.dart';
 import 'package:frosty/screens/channel/video/stream_info_bar.dart';
@@ -304,6 +305,23 @@ class _VideoChatState extends State<VideoChat>
   /// Convenience getter for the currently active chat store.
   ChatStore get _chatStore => _chatTabsStore.activeChatStore;
 
+  void _openAudioOnly() {
+    final stream = _videoStore.streamInfo;
+    if (stream == null) return;
+    if (!_videoStore.paused) {
+      _videoStore.handlePausePlay();
+    }
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        settings: const RouteSettings(name: AudioOnlyPage.routeName),
+        builder: (_) => AudioOnlyPage(
+          userLogin: stream.userLogin,
+          displayName: stream.userName,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final settingsStore = _chatTabsStore.settingsStore;
@@ -347,6 +365,7 @@ class _VideoChatState extends State<VideoChat>
             videoStore: _videoStore,
             chatStore: _chatStore,
             settingsStore: settingsStore,
+            onOpenAudioOnly: _openAudioOnly,
           );
 
           if (_videoStore.paused ||
