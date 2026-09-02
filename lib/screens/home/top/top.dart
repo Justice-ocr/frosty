@@ -61,7 +61,7 @@ class _TopSectionState extends State<TopSection>
             child: TabBar(
               isScrollable: true,
               controller: _tabBarController,
-              tabs: const [
+              tabs: [
                 Tab(child: Text(context.l10n('Streams'))),
                 Tab(child: Text(context.l10n('Categories'))),
               ],

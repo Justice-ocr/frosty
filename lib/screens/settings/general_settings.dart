@@ -9,6 +9,7 @@ import 'package:frosty/widgets/external_browser_setting.dart';
 // import removed: frosty/widgets/dialog.dart
 import 'package:frosty/widgets/section_header.dart';
 import 'package:frosty/widgets/settings_page_layout.dart';
+import 'package:frosty/screens/settings/widgets/settings_list_select.dart';
 import 'package:frosty/widgets/theme_selection_setting.dart';
 
 class GeneralSettings extends StatelessWidget {
