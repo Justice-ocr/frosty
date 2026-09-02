@@ -118,7 +118,9 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v3
         with:
-          draft: true
-          generate_release_notes: ${{ steps.release_notes.outputs.found != 'true' }}
-          body: ${{ steps.release_notes.outputs.found == 'true' && steps.release_notes.outputs.body || '' }}
+          draft: false
+          # Fork tokens may not have the generate-release-notes permission.
+          # Always provide an explicit body instead of calling that API.
+          generate_release_notes: false
+          body: ${{ steps.release_notes.outputs.found == 'true' && steps.release_notes.outputs.body || format('Frosty fork release {0}.', github.ref_name) }}
           files: frosty-${{ github.ref_name }}.apk
