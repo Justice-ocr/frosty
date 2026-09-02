@@ -4,8 +4,8 @@ import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/cache_manager.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/settings/stores/settings_store.dart';
 import 'package:frosty/screens/settings/widgets/release_notes.dart';
 import 'package:frosty/screens/settings/widgets/settings_list_switch.dart';
@@ -28,7 +28,7 @@ class _OtherSettingsState extends State<OtherSettings> {
       context: context,
       builder: (context) => FrostyDialog(
         title: t('Reset all settings'),
-        message: t('Reset all settings') + '?',
+        message: '${t('Reset all settings')}?',
         actions: [
           TextButton(
             onPressed: Navigator.of(context).pop,

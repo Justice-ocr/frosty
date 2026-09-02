@@ -166,7 +166,7 @@ class _Artwork extends StatelessWidget {
         width: 144,
         height: 144,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => fallback,
+        errorBuilder: (_, _, _) => fallback,
       ),
     );
   }
