@@ -21,7 +21,9 @@ jobs:
       STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       KEY_FILE_PATH: android/key.properties
-      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      # Client IDs are public, so forks may provide one as a repository
+      # variable; keep the secret form compatible with upstream.
+      CLIENT_ID: ${{ secrets.CLIENT_ID || vars.CLIENT_ID }}
       SECRET: ${{ secrets.SECRET }}
     steps:
       - name: Checkout Frosty repo
@@ -75,6 +77,14 @@ jobs:
       # Build the APK with the environment variables and move/rename it.
       - name: Build for Android
         run: |
+          if [ -z "$CLIENT_ID" ]; then
+            echo "::error::Missing Twitch CLIENT_ID. Add CLIENT_ID as a repository/environment secret or variable before building a release."
+            exit 1
+          fi
+          if [ -z "$SECRET" ]; then
+            echo "::error::Missing Twitch SECRET. Add SECRET as a repository/environment secret before building a release."
+            exit 1
+          fi
           flutter build apk --dart-define CLIENT_ID=$CLIENT_ID --dart-define SECRET=$SECRET
           mv build/app/outputs/flutter-apk/app-release.apk frosty-${{ github.ref_name }}.apk
 

@@ -37,9 +37,15 @@ jobs:
           fi
       - run: flutter analyze
       - run: flutter test
-      - run: flutter build apk --release
+      - name: Build release APK
+        run: |
+          flutter build apk --release --dart-define CLIENT_ID=$CLIENT_ID --dart-define SECRET=$SECRET
         env:
           ALLOW_DEBUG_SIGNED_RELEASE: '1'
+          # CI only checks compilation; real credentials are required by the
+          # GitHub release workflow below.
+          CLIENT_ID: ci-placeholder-client-id
+          SECRET: ci-placeholder-client-secret
   # macOS runner: release-compile iOS (no codesign, no secrets) — the only thing
   # that must run on macOS. analyze/test already covered on the Linux job.
   ios:
