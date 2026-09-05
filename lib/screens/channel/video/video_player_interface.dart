@@ -35,6 +35,7 @@ abstract class VideoPlayerInterface {
   Future<void> handleRefresh();
   void requestPictureInPicture();
   void togglePictureInPicture();
+  Future<void> setAutomaticPictureInPictureEnabled(bool enabled);
   Future<void> updateStreamQualities();
   Future<void> setStreamQuality(String quality);
   Future<void> updateStreamInfo({bool forceUpdate});

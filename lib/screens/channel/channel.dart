@@ -305,21 +305,30 @@ class _VideoChatState extends State<VideoChat>
   /// Convenience getter for the currently active chat store.
   ChatStore get _chatStore => _chatTabsStore.activeChatStore;
 
-  void _openAudioOnly() {
+  Future<void> _openAudioOnly() async {
     final stream = _videoStore.streamInfo;
     if (stream == null) return;
     if (!_videoStore.paused) {
       _videoStore.handlePausePlay();
     }
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        settings: const RouteSettings(name: AudioOnlyPage.routeName),
-        builder: (_) => AudioOnlyPage(
-          userLogin: stream.userLogin,
-          displayName: stream.userName,
+    await _videoStore.setAutomaticPictureInPictureEnabled(false);
+    if (!mounted) return;
+
+    try {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          settings: const RouteSettings(name: AudioOnlyPage.routeName),
+          builder: (_) => AudioOnlyPage(
+            userLogin: stream.userLogin,
+            displayName: stream.userName,
+          ),
         ),
-      ),
-    );
+      );
+    } finally {
+      if (mounted) {
+        await _videoStore.setAutomaticPictureInPictureEnabled(true);
+      }
+    }
   }
 
   @override

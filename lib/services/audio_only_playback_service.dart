@@ -62,6 +62,11 @@ class AudioOnlyPlaybackService extends ChangeNotifier {
     final controller = NativeVideoPlayerController(
       id: _nextId++,
       autoPlay: true,
+      // Audio-only playback must stay a media session, never a video PiP
+      // session. The hidden 1x1 view must not trigger a floating window when
+      // the app is backgrounded.
+      allowsPictureInPicture: false,
+      canStartPictureInPictureAutomatically: false,
       showNativeControls: false,
       mediaInfo: NativeVideoPlayerMediaInfo(
         title: name,

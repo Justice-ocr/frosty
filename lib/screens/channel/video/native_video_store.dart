@@ -1084,6 +1084,28 @@ abstract class NativeVideoStoreBase
   }
 
   @override
+  Future<void> setAutomaticPictureInPictureEnabled(bool enabled) async {
+    try {
+      if (Platform.isAndroid) {
+        _autoPipAvailable ??= await SimplePip.isAutoPipAvailable;
+        if (_disposed || !_autoPipAvailable!) return;
+        await _pip.setAutoPipMode(
+          autoEnter: enabled && settingsStore.showVideo && !_isAudioOnlyMode,
+        );
+      } else if (Platform.isIOS) {
+        if (enabled) {
+          await _controller?.enableAutomaticInlinePip();
+        } else {
+          await _controller?.disableAutomaticInlinePip();
+          if (_isInPipMode) await _controller?.exitPictureInPicture();
+        }
+      }
+    } catch (e) {
+      debugPrint('Failed to update automatic PiP: $e');
+    }
+  }
+
+  @override
   @action
   Future<void> updateStreamQualities() async {
     // Qualities are populated automatically via qualitiesStream.

@@ -925,6 +925,26 @@ abstract class VideoStoreBase with Store implements VideoPlayerInterface {
   }
 
   @override
+  Future<void> setAutomaticPictureInPictureEnabled(bool enabled) async {
+    try {
+      if (Platform.isAndroid) {
+        if (!await SimplePip.isAutoPipAvailable) return;
+        await pip.setAutoPipMode(
+          autoEnter: enabled && settingsStore.showVideo,
+        );
+      } else if (Platform.isIOS && !enabled) {
+        await videoWebViewController.runJavaScript('''
+          if (document.pictureInPictureElement) {
+            document.exitPictureInPicture();
+          }
+        ''');
+      }
+    } catch (e) {
+      debugPrint('Failed to update automatic PiP: $e');
+    }
+  }
+
+  @override
   @action
   void dispose() {
     // Disable auto PiP when leaving so that we don't enter PiP on other screens.
