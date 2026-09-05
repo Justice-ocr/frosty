@@ -70,10 +70,15 @@ void main() {
       interceptor.onRequest(options, handler);
 
       expect(
-        options.headers['authorization'],
+        options.headers['Authorization'],
         'Bearer lowercase_header_token',
       );
-      expect(options.headers.containsKey('Authorization'), isFalse);
+      expect(
+        options.headers.keys
+            .where((key) => key.toLowerCase() == 'authorization')
+            .length,
+        1,
+      );
     });
 
     test('does not attach the active token to the token endpoint', () {
