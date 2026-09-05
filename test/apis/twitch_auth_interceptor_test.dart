@@ -47,6 +47,47 @@ void main() {
       expect(options.headers['Client-Id'], 'test_client_id');
     });
 
+    test('preserves an explicitly provided OAuth token', () {
+      final options = RequestOptions(
+        path: 'https://id.twitch.tv/oauth2/validate',
+        headers: {'Authorization': 'Bearer new_user_token'},
+      );
+
+      final handler = RequestInterceptorHandler();
+      interceptor.onRequest(options, handler);
+
+      expect(options.headers['Authorization'], 'Bearer new_user_token');
+      expect(options.headers['Client-Id'], 'test_client_id');
+    });
+
+    test('matches explicit header names case-insensitively', () {
+      final options = RequestOptions(
+        path: 'https://id.twitch.tv/oauth2/validate',
+        headers: {'authorization': 'Bearer lowercase_header_token'},
+      );
+
+      final handler = RequestInterceptorHandler();
+      interceptor.onRequest(options, handler);
+
+      expect(
+        options.headers['authorization'],
+        'Bearer lowercase_header_token',
+      );
+      expect(options.headers.containsKey('Authorization'), isFalse);
+    });
+
+    test('does not attach the active token to the token endpoint', () {
+      final options = RequestOptions(
+        path: 'https://id.twitch.tv/oauth2/token',
+      );
+
+      final handler = RequestInterceptorHandler();
+      interceptor.onRequest(options, handler);
+
+      expect(options.headers.containsKey('Authorization'), isFalse);
+      expect(options.headers.containsKey('Client-Id'), isFalse);
+    });
+
     test('does not add headers for BTTV API requests', () {
       final options = RequestOptions(
         path: 'https://api.betterttv.net/3/cached/emotes/global',

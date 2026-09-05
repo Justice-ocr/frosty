@@ -82,21 +82,25 @@ abstract class AuthBase with Store {
 
   /// Authentication headers for Twitch API requests.
   @computed
-  Map<String, String> get headersTwitch => {
-    'Authorization': 'Bearer $_token',
-    'Client-Id': clientId,
-  };
+  Map<String, String> get headersTwitch {
+    final headers = <String, String>{'Client-Id': clientId};
+    final token = _token;
+    if (token != null && token.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+    return headers;
+  }
 
   /// Error flag that will be non-null and contain an error message if login failed.
   @readonly
   String? _error;
 
   /// Navigation handler for the login webview. Fires on every navigation request (whenever the URL changes).
-  FutureOr<NavigationDecision> handleNavigation({
+  Future<NavigationDecision> handleNavigation({
     required NavigationRequest request,
     Widget? routeAfter,
     bool upgradeModeratorScopes = false,
-  }) {
+  }) async {
     // Check if the URL is the redirect URI.
     if (request.url.startsWith('https://twitch.tv/login')) {
       // Extract the token from the query parameters.
@@ -105,9 +109,9 @@ abstract class AuthBase with Store {
 
       if (token != null) {
         if (upgradeModeratorScopes) {
-          unawaited(completeModeratorUpgrade(token: token));
+          await completeModeratorUpgrade(token: token);
         } else {
-          unawaited(login(token: token));
+          await login(token: token);
         }
       }
     }
@@ -392,35 +396,52 @@ abstract class AuthBase with Store {
   /// Logs in the user with the provided [token] and updates fields accordingly upon successful login.
   @action
   Future<void> login({required String token}) async {
+    final previousToken = _token;
+    final previousScopes = List<String>.from(_grantedScopes);
+    final previousLoggedIn = _isLoggedIn;
+
     try {
       // Validate the custom token.
       final info = await twitchApi.validateToken(token: token);
-      if (info == null) return;
+      // App access tokens validate successfully but do not identify a user;
+      // never treat one as a completed interactive login.
+      if (info == null || info.userId == null) {
+        debugPrint('Login rejected: token did not identify a Twitch user');
+        return;
+      }
       _setGrantedScopes(info.scopes);
 
       // Replace the current default token with the new custom token.
       _token = token;
 
-      // Store the user token.
-      await _storage.write(key: _userTokenKey, value: token);
-
       // Initialize the user with the new token.
       await user.init();
 
       // Set the login status to logged in.
-      if (user.details != null) {
-        _isLoggedIn = true;
-        await _persistLastUserId(user.details!.id);
-        // A fresh login that already includes mod scopes (re-auth after opt-in)
-        // should keep the opt-in flag for this account.
-        if (hasModeratorScopes) {
-          await _persistModeratorOptIn(user.details!.id);
-        }
-        FirebaseCrashlytics.instance.setCustomKey('is_logged_in', true);
-        FirebaseCrashlytics.instance.setUserIdentifier(user.details!.id);
-        _stopReconnectLoop();
+      final details = user.details;
+      if (details == null || details.id != info.userId) {
+        throw const ApiException('Twitch returned a different user token');
       }
+
+      // Persist only after token validation and user initialization both
+      // succeed, so a failed login cannot replace a working session.
+      await _storage.write(key: _userTokenKey, value: token);
+      _isLoggedIn = true;
+      await _persistLastUserId(details.id);
+      // A fresh login that already includes mod scopes (re-auth after opt-in)
+      // should keep the opt-in flag for this account.
+      if (hasModeratorScopes) {
+        await _persistModeratorOptIn(details.id);
+      }
+      FirebaseCrashlytics.instance.setCustomKey('is_logged_in', true);
+      FirebaseCrashlytics.instance.setUserIdentifier(details.id);
+      _stopReconnectLoop();
     } catch (e) {
+      // Login is transactional. A failed user-info request must not leave the
+      // store pointing at a token that was never successfully established.
+      _token = previousToken;
+      _setGrantedScopes(previousScopes);
+      _isLoggedIn = previousLoggedIn;
       debugPrint('Login failed due to $e');
     }
   }

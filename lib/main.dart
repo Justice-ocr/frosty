@@ -109,18 +109,23 @@ void main() async {
 
   // Workaround for clearing stored tokens on uninstall.
   // If first time running app, will clear all tokens in the secure storage.
-  // Run non-blocking to avoid ANR on slow Android devices (especially Android 14).
-  if (firstRun) {
+  // Complete the cleanup before auth initialization. Running it in the
+  // background can race with the first login and delete the token just after
+  // it is written.
+  const secureStorageClearedKey = 'secure_storage_cleared';
+  final secureStorageCleared = prefs.getBool(secureStorageClearedKey) ?? false;
+  if (firstRun && !secureStorageCleared) {
     debugPrint('Clearing secure storage...');
     const storage = FlutterSecureStorage();
-
-    // Don't block - run in background after app starts.
-    // This is safe because first run means no active session depends on this data.
-    unawaited(
-      storage.deleteAll().catchError((e) {
-        debugPrint('Error clearing secure storage: $e');
-      }),
-    );
+    try {
+      await storage.deleteAll();
+      // This cleanup is tied to installation, not onboarding completion.
+      // Keep the onboarding flag independent so relaunching mid-onboarding
+      // cannot wipe a freshly persisted Twitch login.
+      await prefs.setBool(secureStorageClearedKey, true);
+    } catch (e) {
+      debugPrint('Error clearing secure storage: $e');
+    }
   }
 
   await initUtils();
