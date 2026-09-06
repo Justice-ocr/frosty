@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/apis/twitch_api.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/models/channel.dart';
 import 'package:frosty/utils.dart';
 import 'package:frosty/utils/modal_bottom_sheet.dart';

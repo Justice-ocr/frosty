@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frosty/l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/settings/stores/auth_store.dart';
 import 'package:frosty/screens/settings/stores/settings_store.dart';
 import 'package:frosty/widgets/blurred_container.dart';

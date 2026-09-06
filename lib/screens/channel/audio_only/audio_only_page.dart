@@ -1,7 +1,7 @@
 import 'package:better_native_video_player/better_native_video_player.dart';
 import 'package:flutter/material.dart';
-import 'package:frosty/services/audio_only_playback_service.dart';
 import 'package:frosty/l10n/app_localizations.dart';
+import 'package:frosty/services/audio_only_playback_service.dart';
 import 'package:frosty/utils/context_extensions.dart';
 
 class AudioOnlyPage extends StatefulWidget {
