@@ -74,7 +74,8 @@ void main() async {
   FlutterError.onError = (details) {
     // Run the cheap type checks first; only fall back to the diagnostics string
     // (RenderFlex overflow has no typed signal) when those miss.
-    final isNonFatal = _isNonFatalError(details.exception) ||
+    final isNonFatal =
+        _isNonFatalError(details.exception) ||
         details.exceptionAsString().contains('overflowed');
     if (isNonFatal) {
       FirebaseCrashlytics.instance.recordFlutterError(details);
@@ -182,8 +183,10 @@ void main() async {
   dioClient.interceptors.add(UnauthorizedInterceptor(authStore));
 
   await authStore.init();
-  FirebaseCrashlytics.instance
-      .setCustomKey('is_logged_in', authStore.isLoggedIn);
+  FirebaseCrashlytics.instance.setCustomKey(
+    'is_logged_in',
+    authStore.isLoggedIn,
+  );
   if (authStore.isLoggedIn && authStore.user.details != null) {
     FirebaseCrashlytics.instance.setUserIdentifier(authStore.user.details!.id);
   }
@@ -260,12 +263,10 @@ class _MyAppState extends State<MyApp> {
           themeMode: settingsStore.themeType == ThemeType.system
               ? ThemeMode.system
               : settingsStore.themeType == ThemeType.light
-                  ? ThemeMode.light
-                  : ThemeMode.dark,
+              ? ThemeMode.light
+              : ThemeMode.dark,
           navigatorObservers: [
-            FirebaseAnalyticsObserver(
-              analytics: FirebaseAnalytics.instance,
-            ),
+            FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
           ],
           home: widget.firstRun ? const OnboardingIntro() : const Home(),
           navigatorKey: navigatorKey,
@@ -284,9 +285,9 @@ class _MyAppState extends State<MyApp> {
       // Handle the initial link if app was opened from a link.
       // Add timeout to prevent indefinite blocking on certain Android lifecycle states.
       final initialLink = await _appLinks.getInitialLink().timeout(
-            const Duration(seconds: 3),
-            onTimeout: () => null,
-          );
+        const Duration(seconds: 3),
+        onTimeout: () => null,
+      );
       if (initialLink != null) {
         handleDeepLink(initialLink);
       }
@@ -296,9 +297,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> handleDeepLink(Uri uri) async {
+    final context = navigatorKey.currentContext;
+    if (context == null) return;
     final failureSnackbar = SnackBar(
       content: AlertMessage(
-        message: 'Unable to navigate to \'$uri\'',
+        message: '${context.l10n('Unable to navigate')}: $uri',
         centered: false,
         trailingIcon: Icons.open_in_browser_rounded,
         // Fallback, allow user to open URL outside app

@@ -9,6 +9,7 @@ import 'package:frosty/models/badges.dart';
 import 'package:frosty/models/emotes.dart';
 import 'package:frosty/models/events.dart';
 import 'package:frosty/models/irc.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/channel/chat/details/chat_details_store.dart';
 import 'package:frosty/screens/channel/chat/stores/banned_user_tracker.dart';
 import 'package:frosty/screens/channel/chat/stores/chat_assets_store.dart';
@@ -128,6 +129,8 @@ abstract class ChatStoreBase with Store {
 
   /// The channel's display name to show on widgets.
   final String displayName;
+
+  String _t(String key) => AppLocalizations(Locale(settings.localeCode))(key);
 
   var _shouldDisconnect = false;
 
@@ -493,7 +496,9 @@ abstract class ChatStoreBase with Store {
 
     assetsStore.init();
 
-    _messages.add(IRCMessage.createNotice(message: 'Connecting to chat...'));
+    _messages.add(
+      IRCMessage.createNotice(message: _t('Connecting to chat...')),
+    );
 
     if (settings.showRecentMessages) {
       getRecentMessage().then((_) => connectToChat());
@@ -1136,13 +1141,13 @@ abstract class ChatStoreBase with Store {
           // Add directly to messages, not buffer, so it shows immediately
           _messages.add(
             IRCMessage.createNotice(
-              message: 'Chat disconnected. Please check your connection.',
+              message: _t('Chat disconnected. Please check your connection.'),
               actionCallback: () {
                 _retries = 0;
                 _backoffTime = 0;
                 connectToChat(isReconnect: true);
               },
-              actionLabel: 'Reconnect',
+              actionLabel: _t('Reconnect'),
             ),
           );
           return;
@@ -1294,7 +1299,7 @@ abstract class ChatStoreBase with Store {
 
     // Create and store reference to the countdown message
     _countdownMessage = IRCMessage.createNotice(
-      message: 'Chat will sync in ${remainingSeconds}s...',
+      message: '${_t('Chat will sync in')} ${remainingSeconds}s...',
     );
     _messages.add(_countdownMessage!);
 
@@ -1321,7 +1326,7 @@ abstract class ChatStoreBase with Store {
           if (remainingSeconds > 0) {
             // Create new message and update reference
             _countdownMessage = IRCMessage.createNotice(
-              message: 'Chat will sync in ${remainingSeconds}s...',
+              message: '${_t('Chat will sync in')} ${remainingSeconds}s...',
             );
             _messages[index] = _countdownMessage!;
           } else {

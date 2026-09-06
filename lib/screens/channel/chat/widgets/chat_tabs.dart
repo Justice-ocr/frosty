@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/models/user.dart';
 import 'package:frosty/screens/channel/chat/chat.dart';
 import 'package:frosty/screens/channel/chat/stores/chat_tabs_store.dart';
@@ -21,8 +22,8 @@ class ChatTabs extends StatelessWidget {
   Future<void> _handleAddChat(BuildContext context) async {
     if (!chatTabsStore.canAddTab) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Maximum 10 chats open'),
+        SnackBar(
+          content: Text(context.l10n('Maximum 10 chats open')),
           duration: Duration(seconds: 2),
         ),
       );
@@ -40,8 +41,8 @@ class ChatTabs extends StatelessWidget {
 
       if (!added && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Channel already open, switched to it'),
+          SnackBar(
+            content: Text(context.l10n('Channel already open, switched to it')),
             duration: Duration(seconds: 2),
           ),
         );
@@ -51,7 +52,11 @@ class ChatTabs extends StatelessWidget {
 
   /// Wraps a tab bar item (a tab chip or a shared-chat bubble) with its
   /// trailing gap and centering, keyed for the reorderable list.
-  Widget _wrapItem({required Key key, required bool isLast, required Widget child}) {
+  Widget _wrapItem({
+    required Key key,
+    required bool isLast,
+    required Widget child,
+  }) {
     return Padding(
       key: key,
       padding: EdgeInsets.only(right: isLast ? 0 : 4),
@@ -70,8 +75,8 @@ class ChatTabs extends StatelessWidget {
         // channel itself, which is already shown as its own tab chip).
         final sharedChatParticipants = activeStore.isInSharedChatMode
             ? activeStore.assetsStore.channelIdToUserTwitch.entries
-                .where((entry) => entry.key != activeStore.channelId)
-                .toList()
+                  .where((entry) => entry.key != activeStore.channelId)
+                  .toList()
             : const <MapEntry<String, UserTwitch>>[];
         final showTabBar =
             chatTabsStore.showTabBar || sharedChatParticipants.isNotEmpty;
@@ -143,7 +148,8 @@ class ChatTabs extends StatelessWidget {
                           right: showMerge ? 33 : 0,
                           child: ReorderableListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: tabs.length + sharedChatParticipants.length,
+                            itemCount:
+                                tabs.length + sharedChatParticipants.length,
                             padding: EdgeInsets.only(
                               left: 12,
                               right: showMerge ? 32 : 12,
@@ -226,7 +232,7 @@ class ChatTabs extends StatelessWidget {
               HapticFeedback.selectionClick();
               chatTabsStore.toggleMergedMode();
             },
-            child: const Text('Merge chats'),
+            child: Text(context.l10n('Merge chats')),
           ),
         ),
         Observer(
@@ -236,19 +242,20 @@ class ChatTabs extends StatelessWidget {
               HapticFeedback.selectionClick();
               settings.focusCurrentChannel = newValue ?? false;
             },
-            child: const Text('Focus current channel'),
+            child: Text(context.l10n('Focus current channel')),
           ),
         ),
       ],
       anchorBuilder: (context, toggle) {
         return IconButton.filledTonal(
           icon: const Icon(Icons.more_vert, size: 18),
-          tooltip: 'Chat options',
+          tooltip: context.l10n('Chat options'),
           visualDensity: VisualDensity.compact,
           style: IconButton.styleFrom(
             minimumSize: const Size(42, 42),
-            backgroundColor:
-                Theme.of(context).colorScheme.surfaceContainerHighest,
+            backgroundColor: Theme.of(
+              context,
+            ).colorScheme.surfaceContainerHighest,
           ),
           onPressed: () {
             HapticFeedback.selectionClick();
@@ -273,43 +280,46 @@ class ChatTabs extends StatelessWidget {
         final theme = Theme.of(context);
         final isActivated = tabInfo.isActivated;
         final hasUnread = chatTabsStore.hasUnreadMessages(index);
-        final dimmed = !isActivated || !(tabInfo.chatStore?.isConnected ?? false);
+        final dimmed =
+            !isActivated || !(tabInfo.chatStore?.isConnected ?? false);
 
         InputChip buildChip({VoidCallback? onDeleted}) => InputChip(
-              avatar: Badge(
-                smallSize: 8,
-                backgroundColor: theme.colorScheme.primary,
-                isLabelVisible: hasUnread,
-                child: Opacity(
-                  opacity: dimmed ? 0.5 : 1.0,
-                  child: ProfilePicture(
-                    userLogin: tabInfo.channelLogin,
-                    radius: 12,
-                  ),
-                ),
+          avatar: Badge(
+            smallSize: 8,
+            backgroundColor: theme.colorScheme.primary,
+            isLabelVisible: hasUnread,
+            child: Opacity(
+              opacity: dimmed ? 0.5 : 1.0,
+              child: ProfilePicture(
+                userLogin: tabInfo.channelLogin,
+                radius: 12,
               ),
-              label: Text(
-                displayName,
-                style: dimmed
-                    ? TextStyle(
-                        color: theme.textTheme.bodyMedium?.color
-                            ?.withValues(alpha: 0.5),
-                      )
-                    : null,
-              ),
-              selected: isActive,
-              showCheckmark: false,
-              visualDensity: VisualDensity.compact,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              onPressed: () {
-                if (isActive) return;
-                HapticFeedback.selectionClick();
-                chatTabsStore.setActiveTab(index);
-              },
-              onDeleted: onDeleted,
-              deleteButtonTooltipMessage:
-                  onDeleted != null ? 'Tab options' : null,
-            );
+            ),
+          ),
+          label: Text(
+            displayName,
+            style: dimmed
+                ? TextStyle(
+                    color: theme.textTheme.bodyMedium?.color?.withValues(
+                      alpha: 0.5,
+                    ),
+                  )
+                : null,
+          ),
+          selected: isActive,
+          showCheckmark: false,
+          visualDensity: VisualDensity.compact,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          onPressed: () {
+            if (isActive) return;
+            HapticFeedback.selectionClick();
+            chatTabsStore.setActiveTab(index);
+          },
+          onDeleted: onDeleted,
+          deleteButtonTooltipMessage: onDeleted != null
+              ? context.l10n('Tab options')
+              : null,
+        );
 
         if (!isSecondary) return buildChip();
 
@@ -318,7 +328,7 @@ class ChatTabs extends StatelessWidget {
             if (isActivated)
               MenuItemButton(
                 leadingIcon: const Icon(Icons.power_off_rounded, size: 18),
-                child: const Text('Disconnect'),
+                child: Text(context.l10n('Disconnect')),
                 onPressed: () {
                   HapticFeedback.lightImpact();
                   close();
@@ -332,7 +342,7 @@ class ChatTabs extends StatelessWidget {
                 color: theme.colorScheme.error,
               ),
               child: Text(
-                'Remove',
+                context.l10n('Remove'),
                 style: TextStyle(color: theme.colorScheme.error),
               ),
               onPressed: () {
@@ -342,8 +352,7 @@ class ChatTabs extends StatelessWidget {
               },
             ),
           ],
-          anchorBuilder: (context, toggle) =>
-              buildChip(onDeleted: toggle),
+          anchorBuilder: (context, toggle) => buildChip(onDeleted: toggle),
         );
       },
     );
@@ -369,31 +378,33 @@ class ChatTabs extends StatelessWidget {
         final isHidden = activeStore.sharedChatBubbles.isHidden(channelId);
 
         InputChip buildChip({VoidCallback? onDeleted}) => InputChip(
-              avatar: Opacity(
-                opacity: isHidden ? 0.5 : 1.0,
-                child: ProfilePicture(userLogin: user.login, radius: 12),
-              ),
-              label: Text(
-                displayName,
-                style: isHidden
-                    ? TextStyle(
-                        color: theme.textTheme.bodyMedium?.color
-                            ?.withValues(alpha: 0.5),
-                      )
-                    : null,
-              ),
-              selected: isFocused,
-              showCheckmark: false,
-              visualDensity: VisualDensity.compact,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              onPressed: () {
-                HapticFeedback.selectionClick();
-                activeStore.sharedChatBubbles.toggleFocus(channelId);
-              },
-              onDeleted: onDeleted,
-              deleteButtonTooltipMessage:
-                  onDeleted != null ? 'Channel options' : null,
-            );
+          avatar: Opacity(
+            opacity: isHidden ? 0.5 : 1.0,
+            child: ProfilePicture(userLogin: user.login, radius: 12),
+          ),
+          label: Text(
+            displayName,
+            style: isHidden
+                ? TextStyle(
+                    color: theme.textTheme.bodyMedium?.color?.withValues(
+                      alpha: 0.5,
+                    ),
+                  )
+                : null,
+          ),
+          selected: isFocused,
+          showCheckmark: false,
+          visualDensity: VisualDensity.compact,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          onPressed: () {
+            HapticFeedback.selectionClick();
+            activeStore.sharedChatBubbles.toggleFocus(channelId);
+          },
+          onDeleted: onDeleted,
+          deleteButtonTooltipMessage: onDeleted != null
+              ? context.l10n('Channel options')
+              : null,
+        );
 
         return _AnchoredPopupMenu(
           itemsBuilder: (close) => [
@@ -404,7 +415,11 @@ class ChatTabs extends StatelessWidget {
                     : Icons.visibility_off_rounded,
                 size: 18,
               ),
-              child: Text(isHidden ? 'Show channel' : 'Hide channel'),
+              child: Text(
+                isHidden
+                    ? context.l10n('Show channel')
+                    : context.l10n('Hide channel'),
+              ),
               onPressed: () {
                 HapticFeedback.lightImpact();
                 close();
@@ -429,7 +444,7 @@ class ChatTabs extends StatelessWidget {
 /// animation hook in this Flutter version, so we drive one ourselves.
 class _AnchoredPopupMenu extends StatefulWidget {
   final Widget Function(BuildContext context, VoidCallback toggle)
-      anchorBuilder;
+  anchorBuilder;
   final List<Widget> Function(VoidCallback close) itemsBuilder;
 
   const _AnchoredPopupMenu({
@@ -445,17 +460,17 @@ class _AnchoredPopupMenuState extends State<_AnchoredPopupMenu>
     with SingleTickerProviderStateMixin {
   final _link = LayerLink();
   final _portalCtrl = OverlayPortalController();
-  late final _anim = AnimationController(
-    duration: const Duration(milliseconds: 150),
-    reverseDuration: const Duration(milliseconds: 100),
-    vsync: this,
-  )..addStatusListener((status) {
-      if (status == AnimationStatus.dismissed && _portalCtrl.isShowing) {
-        _portalCtrl.hide();
-      }
-    });
-  late final _curve =
-      CurvedAnimation(parent: _anim, curve: Curves.easeOut);
+  late final _anim =
+      AnimationController(
+        duration: const Duration(milliseconds: 150),
+        reverseDuration: const Duration(milliseconds: 100),
+        vsync: this,
+      )..addStatusListener((status) {
+        if (status == AnimationStatus.dismissed && _portalCtrl.isShowing) {
+          _portalCtrl.hide();
+        }
+      });
+  late final _curve = CurvedAnimation(parent: _anim, curve: Curves.easeOut);
   late final _scale = Tween<double>(begin: 0.92, end: 1.0).animate(_curve);
 
   @override
@@ -512,8 +527,9 @@ class _AnchoredPopupMenuState extends State<_AnchoredPopupMenu>
                           Radius.circular(12),
                         ),
                         side: BorderSide(
-                          color: theme.colorScheme.outlineVariant
-                              .withValues(alpha: 0.5),
+                          color: theme.colorScheme.outlineVariant.withValues(
+                            alpha: 0.5,
+                          ),
                           width: 0.5,
                         ),
                       ),

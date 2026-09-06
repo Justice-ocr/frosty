@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 
 /// A simple widget that displays an alert message in the center.
 class AlertMessage extends StatelessWidget {
@@ -24,8 +25,9 @@ class AlertMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final defaultColor =
-        vertical ? colorScheme.onSurfaceVariant : colorScheme.onSurface;
+    final defaultColor = vertical
+        ? colorScheme.onSurfaceVariant
+        : colorScheme.onSurface;
 
     final Widget widget;
 
@@ -37,7 +39,7 @@ class AlertMessage extends StatelessWidget {
         children: [
           Icon(Icons.info_outline_rounded, color: color ?? defaultColor),
           Text(
-            message,
+            context.l10n(message),
             textAlign: centered ? TextAlign.center : TextAlign.start,
             style: TextStyle(color: color ?? defaultColor),
           ),
@@ -53,7 +55,7 @@ class AlertMessage extends StatelessWidget {
           Icon(Icons.info_outline_rounded, color: color ?? defaultColor),
           Flexible(
             child: Text(
-              message,
+              context.l10n(message),
               style: TextStyle(color: color ?? defaultColor),
             ),
           ),

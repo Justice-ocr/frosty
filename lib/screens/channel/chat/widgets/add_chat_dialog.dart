@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/apis/twitch_api.dart';
 import 'package:frosty/models/channel.dart';
 import 'package:frosty/utils.dart';
@@ -143,7 +144,7 @@ class _AddChatSheetState extends State<AddChatSheet> {
                 autocorrect: false,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search_rounded),
-                  hintText: 'Search for a channel',
+                  hintText: context.l10n('Search for a channel'),
                   suffixIcon:
                       _focusNode.hasFocus || _textController.text.isNotEmpty
                       ? IconButton(
@@ -210,7 +211,7 @@ class _AddChatSheetState extends State<AddChatSheet> {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            'No channels found',
+            context.l10n('No channels found'),
             style: TextStyle(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/channel/chat/stores/chat_store.dart';
 import 'package:frosty/screens/channel/chat/widgets/chat_message.dart';
 import 'package:frosty/screens/channel/chat/widgets/moderation_actions.dart';
@@ -62,7 +63,7 @@ class _ChatUserModalState extends State<ChatUserModal> {
               children: [
                 if (widget.chatStore.auth.isLoggedIn)
                   IconButton(
-                    tooltip: 'Reply',
+                    tooltip: context.l10n('Reply'),
                     onPressed: () {
                       widget.onActivateSourceTab?.call();
                       widget.chatStore.textController.text =
@@ -73,7 +74,7 @@ class _ChatUserModalState extends State<ChatUserModal> {
                     icon: const Icon(Icons.reply_rounded),
                   ),
                 IconButton(
-                  tooltip: 'More',
+                  tooltip: context.l10n('More'),
                   onPressed: () => showModalBottomSheetWithProperFocus(
                     context: context,
                     builder: (context) => UserActionsModal(
@@ -104,7 +105,9 @@ class _ChatUserModalState extends State<ChatUserModal> {
                     .toList();
 
                 if (userMessages.isEmpty) {
-                  return const AlertMessage(message: 'No recent messages');
+                  return AlertMessage(
+                    message: context.l10n('No recent messages'),
+                  );
                 }
 
                 return MediaQuery(

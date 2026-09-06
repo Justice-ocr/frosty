@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/constants.dart';
 import 'package:frosty/main.dart';
 import 'package:frosty/models/irc.dart';
@@ -318,7 +319,9 @@ class _ChatDetailsState extends State<ChatDetails> {
           Observer(
             builder: (context) {
               final showVideo = widget.chatStore.settings.showVideo;
-              final label = showVideo ? 'Chat only' : 'Show video';
+              final label = context.l10n(
+                showVideo ? 'Chat only' : 'Show video',
+              );
               return ListTile(
                 leading: Icon(
                   showVideo ? Icons.chat_rounded : Icons.tv_rounded,
@@ -333,14 +336,14 @@ class _ChatDetailsState extends State<ChatDetails> {
           ),
           ListTile(
             leading: const Icon(Icons.sync_rounded),
-            title: const Text('Refresh emotes and badges'),
+            title: Text(context.l10n('Refresh emotes and badges')),
             trailing: _buildRefreshTrailingWidget(),
             enabled: !_isRefreshingAssets,
             onTap: _isRefreshingAssets ? null : _handleRefreshAssets,
           ),
           ListTile(
             leading: const Icon(Icons.wifi_off_rounded),
-            title: const Text('Reconnect'),
+            title: Text(context.l10n('Reconnect')),
             onTap: () {
               Navigator.of(context).pop();
               widget.chatStore.updateNotification('Reconnecting to chat...');
@@ -350,13 +353,13 @@ class _ChatDetailsState extends State<ChatDetails> {
           if (widget.chatStore.auth.isLoggedIn)
             ListTile(
               leading: const Icon(Icons.palette_rounded),
-              title: const Text('Username color'),
+              title: Text(context.l10n('Username color')),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => _showChatColorPicker(context),
             ),
           ListTile(
             leading: const Icon(Icons.people_rounded),
-            title: const Text('Chatters'),
+            title: Text(context.l10n('Chatters')),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => showModalBottomSheetWithProperFocus(
               isScrollControlled: true,
@@ -373,7 +376,7 @@ class _ChatDetailsState extends State<ChatDetails> {
           ),
           ListTile(
             leading: const Icon(Icons.add_comment_rounded),
-            title: const Text('Add chat'),
+            title: Text(context.l10n('Add chat')),
             trailing: const Icon(Icons.chevron_right),
             onTap: widget.onAddChat,
           ),
@@ -411,7 +414,7 @@ class _ChatDetailsState extends State<ChatDetails> {
           ),
           ListTile(
             leading: const Icon(Icons.settings_rounded),
-            title: const Text('Settings'),
+            title: Text(context.l10n('Settings')),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => Navigator.push(
               context,
@@ -523,7 +526,7 @@ class _ChatColorPickerModalState extends State<_ChatColorPickerModal> {
       command: Command.privateMessage,
       tags: mockTags,
       user: userDetails.login,
-      message: 'How it will look in chat',
+      message: context.l10n('How it will look in chat'),
       split: ['How', 'it', 'will', 'look', 'in', 'chat'],
       action: false,
       mention: false,
@@ -599,7 +602,7 @@ class _ChatColorPickerModalState extends State<_ChatColorPickerModal> {
                 Expanded(
                   child: TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
+                    child: Text(context.l10n('Cancel')),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -608,7 +611,7 @@ class _ChatColorPickerModalState extends State<_ChatColorPickerModal> {
                     onPressed: selectedColor == null
                         ? null
                         : () => widget.onColorSelected(context, selectedColor!),
-                    child: const Text('Save'),
+                    child: Text(context.l10n('Save')),
                   ),
                 ),
               ],

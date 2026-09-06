@@ -1,6 +1,7 @@
 import 'package:better_native_video_player/better_native_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:frosty/services/audio_only_playback_service.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/utils/context_extensions.dart';
 
 class AudioOnlyPage extends StatefulWidget {
@@ -51,10 +52,10 @@ class _AudioOnlyPageState extends State<AudioOnlyPage> {
     final controller = service.controller;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('听视频'),
+        title: Text(context.l10n('Audio mode')),
         actions: [
           IconButton(
-            tooltip: '停止播放',
+            tooltip: context.l10n('Stop playback'),
             icon: const Icon(Icons.stop_rounded),
             onPressed: controller == null ? null : service.stop,
           ),
@@ -92,10 +93,10 @@ class _AudioOnlyPageState extends State<AudioOnlyPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      service.title ?? '音频模式',
+                      service.title ?? context.l10n('Audio mode'),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: context.colorScheme.onSurfaceVariant,
-                          ),
+                        color: context.colorScheme.onSurfaceVariant,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 28),
@@ -109,7 +110,9 @@ class _AudioOnlyPageState extends State<AudioOnlyPage> {
                     if (!service.isLoading && service.error == null)
                       IconButton.filled(
                         iconSize: 42,
-                        tooltip: service.isPlaying ? '暂停' : '播放',
+                        tooltip: service.isPlaying
+                            ? context.l10n('Pause')
+                            : context.l10n('Play'),
                         icon: Icon(
                           service.isPlaying
                               ? Icons.pause_rounded
@@ -132,10 +135,10 @@ class _AudioOnlyPageState extends State<AudioOnlyPage> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      '退出此页面后仍会在后台播放',
+                      context.l10n('Audio continues in background'),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: context.colorScheme.onSurfaceVariant,
-                          ),
+                        color: context.colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),

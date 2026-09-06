@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/constants.dart';
 import 'package:frosty/models/stream.dart';
 import 'package:frosty/screens/channel/channel.dart';
@@ -59,9 +60,8 @@ class StreamCard extends StatelessWidget {
           '-${thumbnailWidth}x$thumbnailHeight',
         ),
         cacheKey: cacheKey,
-        placeholder: (context, url) => const SkeletonLoader(
-          borderRadius: kCardBorderRadius,
-        ),
+        placeholder: (context, url) =>
+            const SkeletonLoader(borderRadius: kCardBorderRadius),
         useOldImageOnUrlChange: true,
       ),
     );
@@ -74,7 +74,7 @@ class StreamCard extends StatelessWidget {
     final streamTitle = streamInfo.title.trim();
     final category = streamInfo.gameName.isNotEmpty
         ? streamInfo.gameName
-        : 'No Category';
+        : context.l10n('No Category');
 
     const subFontSize = 14.0;
 
@@ -168,7 +168,9 @@ class StreamCard extends StatelessWidget {
                   ? () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        settings: const RouteSettings(name: CategoryStreams.routeName),
+                        settings: const RouteSettings(
+                          name: CategoryStreams.routeName,
+                        ),
                         builder: (context) =>
                             CategoryStreams(categoryId: streamInfo.gameId),
                       ),

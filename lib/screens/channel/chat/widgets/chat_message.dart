@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/apis/twitch_api.dart';
 import 'package:frosty/constants.dart';
 import 'package:frosty/models/irc.dart';
@@ -157,7 +158,7 @@ class ChatMessage extends StatelessWidget {
               Navigator.pop(context);
             },
             leading: const Icon(Icons.copy),
-            title: const Text('Copy message'),
+            title: Text(context.l10n('Copy message')),
           ),
           ListTile(
             onTap: () async {
@@ -190,7 +191,7 @@ class ChatMessage extends StatelessWidget {
               }
             },
             leading: const Icon(Icons.content_paste),
-            title: const Text('Copy message and paste'),
+            title: Text(context.l10n('Copy message and paste')),
           ),
           ListTile(
             onTap: () {
@@ -204,7 +205,7 @@ class ChatMessage extends StatelessWidget {
               Navigator.pop(context);
             },
             leading: const Icon(Icons.reply),
-            title: const Text('Reply to message'),
+            title: Text(context.l10n('Reply to message')),
           ),
           if (ircMessage.tags['user-id'] != null)
             ModerationActions(
@@ -448,7 +449,7 @@ class ChatMessage extends StatelessWidget {
                     ),
                     TextSpan(text: ' '),
                     TextSpan(
-                      text: ircMessage.actionLabel!,
+                      text: context.l10n(ircMessage.actionLabel!),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w600,
@@ -463,7 +464,7 @@ class ChatMessage extends StatelessWidget {
               );
             } else {
               renderMessage = Text.rich(
-                TextSpan(text: ircMessage.message),
+                TextSpan(text: context.l10n(ircMessage.message ?? '')),
                 style: noticeStyle,
               );
             }

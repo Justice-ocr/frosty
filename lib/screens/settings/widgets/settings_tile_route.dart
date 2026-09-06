@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/widgets/blurred_container.dart';
 
 class SettingsTileRoute extends StatelessWidget {
@@ -60,7 +61,7 @@ class _BlurredSettingsPage extends StatelessWidget {
               : Brightness.dark,
         ),
         leading: IconButton(
-          tooltip: 'Back',
+          tooltip: context.l10n('Back'),
           icon: Icon(Icons.adaptive.arrow_back_rounded),
           onPressed: Navigator.of(context).pop,
         ),

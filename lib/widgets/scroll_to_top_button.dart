@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 
 class ScrollToTopButton extends StatelessWidget {
   final ScrollController scrollController;
@@ -11,7 +12,7 @@ class ScrollToTopButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8),
         child: Tooltip(
-          message: 'Scroll to top',
+          message: context.l10n('Scroll to top'),
           preferBelow: false,
           child: FilledButton(
             onPressed: () => scrollController.animateTo(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frosty/constants.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/channel/chat/details/chat_users_list.dart';
 import 'package:frosty/screens/channel/chat/stores/chat_store.dart';
 import 'package:frosty/screens/channel/video/native_video_store.dart';
@@ -55,9 +56,10 @@ class VideoOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final surfaceColor = context.frostyColors.overlayOnSurface;
+    final t = context.l10n;
 
     final backButton = IconButton(
-      tooltip: 'Back',
+      tooltip: t('Back'),
       icon: Icon(
         Icons.adaptive.arrow_back_rounded,
         color: surfaceColor,
@@ -69,8 +71,8 @@ class VideoOverlay extends StatelessWidget {
     final chatOverlayButton = Observer(
       builder: (_) => IconButton(
         tooltip: videoStore.settingsStore.fullScreenChatOverlay
-            ? 'Hide chat overlay'
-            : 'Show chat overlay',
+            ? t('Hide chat overlay')
+            : t('Show chat overlay'),
         onPressed: () => videoStore.settingsStore.fullScreenChatOverlay =
             !videoStore.settingsStore.fullScreenChatOverlay,
         icon: videoStore.settingsStore.fullScreenChatOverlay
@@ -91,8 +93,8 @@ class VideoOverlay extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SectionHeader(
-                'Quality',
+              SectionHeader(
+                t('Quality'),
                 padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
                 isFirst: true,
               ),
@@ -126,7 +128,7 @@ class VideoOverlay extends StatelessWidget {
                         (quality) => ListTile(
                           enabled: false,
                           title: Text(quality),
-                          subtitle: const Text('Subscribers only'),
+                          subtitle: Text(t('Subscribers only')),
                         ),
                       ),
                     ],
@@ -140,7 +142,7 @@ class VideoOverlay extends StatelessWidget {
     );
 
     final refreshButton = Tooltip(
-      message: 'Refresh',
+      message: t('Refresh'),
       preferBelow: false,
       child: IconButton(
         icon: Icon(
@@ -155,8 +157,8 @@ class VideoOverlay extends StatelessWidget {
     final fullScreenButton = Observer(
       builder: (_) => Tooltip(
         message: videoStore.settingsStore.fullScreen
-            ? 'Exit fullscreen mode'
-            : 'Enter fullscreen mode',
+            ? t('Exit fullscreen mode')
+            : t('Enter fullscreen mode'),
         preferBelow: false,
         child: IconButton(
           icon: Icon(
@@ -174,8 +176,8 @@ class VideoOverlay extends StatelessWidget {
 
     final rotateButton = Tooltip(
       message: context.isPortrait
-          ? 'Enter landscape mode'
-          : 'Exit landscape mode',
+          ? t('Enter landscape mode')
+          : t('Exit landscape mode'),
       preferBelow: false,
       child: IconButton(
         icon: Icon(
@@ -401,7 +403,7 @@ class VideoOverlay extends StatelessWidget {
                             spacing: 8,
                             children: [
                               Tooltip(
-                                message: 'Stream uptime',
+                                message: t('Stream uptime'),
                                 preferBelow: false,
                                 triggerMode: TooltipTriggerMode.tap,
                                 child: Row(
@@ -420,7 +422,7 @@ class VideoOverlay extends StatelessWidget {
                                 ),
                               ),
                               Tooltip(
-                                message: 'Viewer count',
+                                message: t('Viewer count'),
                                 preferBelow: false,
                                 child: GestureDetector(
                                   onTap: () =>
@@ -465,7 +467,7 @@ class VideoOverlay extends StatelessWidget {
                               ),
                               if (settingsStore.showLatency)
                                 Tooltip(
-                                  message: 'Latency to broadcaster',
+                                  message: t('Latency to broadcaster'),
                                   preferBelow: false,
                                   triggerMode: TooltipTriggerMode.tap,
                                   child: Row(
@@ -499,7 +501,7 @@ class VideoOverlay extends StatelessWidget {
                       ),
                       if (onOpenAudioOnly != null)
                         Tooltip(
-                          message: '听视频',
+                          message: t('Audio mode'),
                           preferBelow: false,
                           child: IconButton(
                             icon: Icon(
@@ -518,8 +520,8 @@ class VideoOverlay extends StatelessWidget {
 
                           return Tooltip(
                             message: showExitState
-                                ? 'Exit picture-in-picture'
-                                : 'Enter picture-in-picture',
+                                ? t('Exit picture-in-picture')
+                                : t('Enter picture-in-picture'),
                             preferBelow: false,
                             child: IconButton(
                               icon: Icon(

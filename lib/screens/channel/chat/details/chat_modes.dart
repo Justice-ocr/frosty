@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/models/irc.dart';
 import 'package:frosty/utils/context_extensions.dart';
 
@@ -14,19 +15,20 @@ class ChatModes extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
+        final t = context.l10n;
         final activeModes = <MapEntry<String, Widget>>[];
 
         // Collect active modes with their labels for sorting
         if (roomState.emoteOnly != '0') {
           activeModes.add(
             MapEntry(
-              'Emote only',
+              t('Emote only'),
               _buildModeChip(
                 context: context,
                 icon: Icons.emoji_emotions_outlined,
                 activeIcon: Icons.emoji_emotions_rounded,
-                label: 'Emote only',
-                activeLabel: 'Emote only',
+                label: t('Emote only'),
+                activeLabel: t('Emote only'),
                 isActive: true,
                 activeColor: context.frostyColors.emoteOnly,
               ),
@@ -37,13 +39,13 @@ class ChatModes extends StatelessWidget {
         if (roomState.followersOnly != '-1') {
           activeModes.add(
             MapEntry(
-              'Follower only',
+              t('Follower only'),
               _buildModeChip(
                 context: context,
                 icon: Icons.favorite_outline_rounded,
                 activeIcon: Icons.favorite_rounded,
-                label: 'Follower only',
-                activeLabel: 'Follower only',
+                label: t('Follower only'),
+                activeLabel: t('Follower only'),
                 isActive: true,
                 activeColor: context.frostyColors.followersOnly,
                 duration: _getFollowersDuration(),
@@ -55,13 +57,13 @@ class ChatModes extends StatelessWidget {
         if (roomState.slowMode != '0') {
           activeModes.add(
             MapEntry(
-              'Slow mode',
+              t('Slow mode'),
               _buildModeChip(
                 context: context,
                 icon: Icons.hourglass_empty_rounded,
                 activeIcon: Icons.hourglass_top_rounded,
-                label: 'Slow mode',
-                activeLabel: 'Slow mode',
+                label: t('Slow mode'),
+                activeLabel: t('Slow mode'),
                 isActive: true,
                 activeColor: context.frostyColors.slowMode,
                 duration: _getSlowModeDuration(),
@@ -73,13 +75,13 @@ class ChatModes extends StatelessWidget {
         if (roomState.subMode != '0') {
           activeModes.add(
             MapEntry(
-              'Sub only',
+              t('Sub only'),
               _buildModeChip(
                 context: context,
                 icon: Icons.monetization_on_outlined,
                 activeIcon: Icons.monetization_on_rounded,
-                label: 'Sub only',
-                activeLabel: 'Sub only',
+                label: t('Sub only'),
+                activeLabel: t('Sub only'),
                 isActive: true,
                 activeColor: context.frostyColors.subOnly,
               ),
@@ -90,13 +92,13 @@ class ChatModes extends StatelessWidget {
         if (roomState.r9k != '0') {
           activeModes.add(
             MapEntry(
-              'Unique mode',
+              t('Unique mode'),
               _buildModeChip(
                 context: context,
                 icon: Icons.quiz_outlined,
                 activeIcon: Icons.quiz_rounded,
-                label: 'Unique mode',
-                activeLabel: 'Unique mode',
+                label: t('Unique mode'),
+                activeLabel: t('Unique mode'),
                 isActive: true,
                 activeColor: context.frostyColors.uniqueMode,
               ),

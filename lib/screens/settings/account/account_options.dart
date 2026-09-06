@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/channel/channel.dart';
 import 'package:frosty/screens/settings/account/blocked_users.dart';
 import 'package:frosty/screens/settings/stores/auth_store.dart';
@@ -15,12 +16,12 @@ class AccountOptions extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (context) => FrostyDialog(
-        title: 'Log out',
+        title: context.l10n('Log out'),
         message: 'Are you sure you want to log out?',
         actions: [
           TextButton(
             onPressed: Navigator.of(context).pop,
-            child: const Text('Cancel'),
+            child: Text(context.l10n('Cancel')),
           ),
           FilledButton(
             onPressed: () {
@@ -28,7 +29,7 @@ class AccountOptions extends StatelessWidget {
               Navigator.pop(context);
               Navigator.pop(context);
             },
-            child: const Text('Log out'),
+            child: Text(context.l10n('Log out')),
           ),
         ],
       ),
@@ -44,7 +45,7 @@ class AccountOptions extends StatelessWidget {
         children: [
           SettingsTileRoute(
             leading: const Icon(Icons.person_rounded),
-            title: 'My channel',
+            title: context.l10n('My channel'),
             useScaffold: false,
             child: VideoChat(
               userId: authStore.user.details!.id,
@@ -54,12 +55,12 @@ class AccountOptions extends StatelessWidget {
           ),
           SettingsTileRoute(
             leading: const Icon(Icons.block_rounded),
-            title: 'Blocked users',
+            title: context.l10n('Blocked users'),
             child: BlockedUsers(authStore: authStore),
           ),
           ListTile(
             leading: const Icon(Icons.logout_rounded),
-            title: const Text('Log out'),
+            title: Text(context.l10n('Log out')),
             onTap: () => _showLogoutDialog(context),
           ),
         ],

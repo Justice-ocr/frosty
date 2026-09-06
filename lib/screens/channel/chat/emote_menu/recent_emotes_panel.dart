@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frosty/constants.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/models/irc.dart';
 import 'package:frosty/screens/channel/chat/stores/chat_store.dart';
 import 'package:frosty/screens/settings/stores/settings_store.dart';
@@ -20,8 +21,8 @@ class RecentEmotesPanel extends StatelessWidget {
     return Observer(
       builder: (context) {
         if (chatStore.assetsStore.recentEmotes.isEmpty) {
-          return const Center(
-            child: AlertMessage(message: 'No recent emotes'),
+          return Center(
+            child: AlertMessage(message: context.l10n('No recent emotes')),
           );
         }
 
@@ -74,8 +75,7 @@ class RecentEmotesPanel extends StatelessWidget {
                       colorBlendMode: matchingEmotes.isNotEmpty
                           ? null
                           : BlendMode.modulate,
-                      height:
-                          emote.height?.toDouble() ?? defaultEmoteSize,
+                      height: emote.height?.toDouble() ?? defaultEmoteSize,
                       width: emote.width?.toDouble(),
                     ),
                   ),

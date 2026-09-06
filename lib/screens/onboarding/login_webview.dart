@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/main.dart';
 import 'package:frosty/screens/settings/stores/auth_store.dart';
 import 'package:frosty/widgets/frosty_app_bar.dart';
@@ -53,13 +54,15 @@ class LoginWebView extends StatelessWidget {
               context: context,
               builder: (context) {
                 return FrostyDialog(
-                  title: 'Workaround for the Twitch cookie banner',
+                  title: context.l10n(
+                    'Workaround for the Twitch cookie banner',
+                  ),
                   message:
                       'If the Twitch cookie banner is still blocking the login, try clicking one of the links in the cookie policy description and navigating until you reach the Twitch home page. From there, try logging in from the top-right profile icon. Once logged in, go back to the first onboarding step and try again.',
                   actions: [
                     TextButton(
                       onPressed: Navigator.of(context).pop,
-                      child: const Text('Close'),
+                      child: Text(context.l10n('Close')),
                     ),
                   ],
                 );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:frosty/screens/settings/stores/auth_store.dart';
 import 'package:frosty/screens/settings/stores/settings_store.dart';
@@ -39,7 +40,9 @@ class UserActionsModal extends StatelessWidget {
         if (showPinOption)
           ListTile(
             leading: const Icon(Icons.push_pin_outlined),
-            title: Text('${isPinned == true ? 'Unpin' : 'Pin'} $name'),
+            title: Text(
+              '${context.l10n(isPinned == true ? 'Unpin' : 'Pin')} $name',
+            ),
             onTap: () {
               if (isPinned == true) {
                 context.read<SettingsStore>().pinnedChannelIds = [
@@ -70,7 +73,7 @@ class UserActionsModal extends StatelessWidget {
                     Navigator.pop(context);
                   }
                 }),
-            title: Text('Block $name'),
+            title: Text('${context.l10n('Block')} $name'),
           ),
         ListTile(
           leading: const Icon(Icons.outlined_flag_rounded),
@@ -97,11 +100,11 @@ class UserActionsModal extends StatelessWidget {
                           : Brightness.dark,
                     ),
                     leading: IconButton(
-                      tooltip: 'Back',
+                      tooltip: context.l10n('Back'),
                       icon: Icon(Icons.adaptive.arrow_back_rounded),
                       onPressed: Navigator.of(context).pop,
                     ),
-                    title: Text('Report $name'),
+                    title: Text('${context.l10n('Report')} $name'),
                   ),
                   body: Stack(
                     children: [
@@ -154,7 +157,7 @@ class UserActionsModal extends StatelessWidget {
               },
             ),
           ),
-          title: Text('Report $name'),
+          title: Text('${context.l10n('Report')} $name'),
         ),
       ],
     );

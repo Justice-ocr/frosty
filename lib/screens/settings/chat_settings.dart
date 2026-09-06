@@ -30,15 +30,17 @@ class ChatSettings extends StatelessWidget {
           SectionHeader(t('General'), isFirst: true),
           SettingsListSwitch(
             title: t('Keep screen on'),
-            subtitle: Text(t(
-                'Prevents the screen from sleeping while a channel is open.')),
+            subtitle: Text(
+              t('Prevents the screen from sleeping while a channel is open.'),
+            ),
             value: settingsStore.keepScreenAwake,
             onChanged: (newValue) => settingsStore.keepScreenAwake = newValue,
           ),
           SettingsListSwitch(
             title: t('Autocomplete'),
-            subtitle:
-                Text(t('Shows matching emotes and mentions while typing.')),
+            subtitle: Text(
+              t('Shows matching emotes and mentions while typing.'),
+            ),
             value: settingsStore.autocomplete,
             onChanged: (newValue) => settingsStore.autocomplete = newValue,
           ),
@@ -58,13 +60,11 @@ class ChatSettings extends StatelessWidget {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => launchUrl(
-                            Uri.parse(
-                              'https://recent-messages.robotty.de/',
-                            ),
-                            mode: settingsStore.launchUrlExternal
-                                ? LaunchMode.externalApplication
-                                : LaunchMode.inAppBrowserView,
-                          ),
+                        Uri.parse('https://recent-messages.robotty.de/'),
+                        mode: settingsStore.launchUrlExternal
+                            ? LaunchMode.externalApplication
+                            : LaunchMode.inAppBrowserView,
+                      ),
                   ),
                 ],
               ),
@@ -101,9 +101,7 @@ class ChatSettings extends StatelessWidget {
                                     defaultBadgeSize * settingsStore.badgeScale,
                               ),
                             ),
-                            const TextSpan(
-                              text: ' Badge and emote preview. ',
-                            ),
+                            const TextSpan(text: ' Badge and emote preview. '),
                             WidgetSpan(
                               alignment: PlaceholderAlignment.middle,
                               child: FrostyCachedNetworkImage(
@@ -182,8 +180,9 @@ class ChatSettings extends StatelessWidget {
           SectionHeader(t('Message appearance')),
           SettingsListSwitch(
             title: t('Show deleted messages'),
-            subtitle:
-                Text(t('Restores the original message of deleted messages.')),
+            subtitle: Text(
+              t('Restores the original message of deleted messages.'),
+            ),
             value: settingsStore.showDeletedMessages,
             onChanged: (newValue) =>
                 settingsStore.showDeletedMessages = newValue,
@@ -248,7 +247,8 @@ class ChatSettings extends StatelessWidget {
           SettingsListSwitch(
             title: t('Show notices'),
             subtitle: Text(
-                t('Shows notices such as subs, announcements, and raids.')),
+              t('Shows notices such as subs, announcements, and raids.'),
+            ),
             value: settingsStore.showUserNotices,
             onChanged: (newValue) => settingsStore.showUserNotices = newValue,
           ),
@@ -263,7 +263,8 @@ class ChatSettings extends StatelessWidget {
           SettingsListSwitch(
             title: t('Remember chat tabs'),
             subtitle: Text(
-                t('Secondary chat tabs are kept when switching channels.')),
+              t('Secondary chat tabs are kept when switching channels.'),
+            ),
             value: settingsStore.persistChatTabs,
             onChanged: (newValue) {
               settingsStore.persistChatTabs = newValue;
@@ -288,20 +289,20 @@ class ChatSettings extends StatelessWidget {
           ),
           SettingsListSelect(
             title: t('Notch fill'),
-            subtitle: 'Fills the display cutout area on the selected side.',
+            subtitle: t('Fills the display cutout area on the selected side.'),
             selectedOption:
                 landscapeCutoutNames[settingsStore.landscapeCutout.index],
             options: landscapeCutoutNames,
             onChanged: (newValue) => settingsStore.landscapeCutout =
                 LandscapeCutoutType.values[landscapeCutoutNames.indexOf(
-              newValue,
-            )],
+                  newValue,
+                )],
           ),
           SettingsListSlider(
             title: t('Overlay chat opacity'),
             trailing:
                 '${(settingsStore.fullScreenChatOverlayOpacity * 100).toStringAsFixed(0)}%',
-            subtitle: 'Opacity of the chat overlay in fullscreen mode.',
+            subtitle: t('Opacity of the chat overlay in fullscreen mode.'),
             value: settingsStore.fullScreenChatOverlayOpacity,
             divisions: 10,
             onChanged: (newValue) =>
@@ -311,8 +312,9 @@ class ChatSettings extends StatelessWidget {
           SettingsMutedWords(settingsStore: settingsStore),
           SettingsListSwitch(
             title: t('Match whole words'),
-            subtitle:
-                Text(t('Only matches whole words instead of partial matches.')),
+            subtitle: Text(
+              t('Only matches whole words instead of partial matches.'),
+            ),
             value: settingsStore.matchWholeWord,
             onChanged: (newValue) => settingsStore.matchWholeWord = newValue,
           ),

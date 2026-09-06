@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/channel/chat/emote_menu/emote_menu_panel.dart';
 import 'package:frosty/screens/channel/chat/emote_menu/recent_emotes_panel.dart';
 import 'package:frosty/screens/channel/chat/stores/chat_store.dart';
@@ -323,7 +324,7 @@ class Chat extends StatelessWidget {
                       Expanded(
                         child: FrostyPageView(
                           headers: [
-                            'Recent',
+                            context.l10n('Recent'),
                             if (chatStore.settings.showTwitchEmotes) 'Twitch',
                             if (chatStore.settings.show7TVEmotes) '7TV',
                             if (chatStore.settings.showBTTVEmotes) 'BTTV',
@@ -339,7 +340,7 @@ class Chat extends StatelessWidget {
                                   );
                                 },
                                 icon: const Icon(Icons.delete_outline_rounded),
-                                tooltip: 'Clear recent emotes',
+                                tooltip: context.l10n('Clear recent emotes'),
                                 iconSize: 20,
                               ),
                           },

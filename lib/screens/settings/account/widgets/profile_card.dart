@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/onboarding/login_webview.dart';
 import 'package:frosty/screens/settings/account/account_options.dart';
 import 'package:frosty/screens/settings/stores/auth_store.dart';
@@ -32,10 +33,10 @@ class ProfileCard extends StatelessWidget {
               Icons.error_outline_rounded,
               color: Theme.of(context).colorScheme.error,
             ),
-            title: const Text('Unable to connect to Twitch'),
+            title: Text(context.l10n('Unable to connect to Twitch')),
             trailing: FilledButton.tonal(
               onPressed: authStore.init,
-              child: const Text('Reconnect'),
+              child: Text(context.l10n('Reconnect')),
             ),
           );
         }
@@ -60,23 +61,25 @@ class ProfileCard extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (dialogContext) => FrostyDialog(
-                            title: 'Web session',
+                            title: context.l10n('Web session'),
                             message: hasToken
-                                ? 'Your Twitch web session is linked. When using the native player, ads will be avoided on channels where you have a subscription or Twitch Turbo.'
-                                : 'Your Twitch web session is not linked. Log in again to avoid ads when using the native player on channels where you have a subscription or Twitch Turbo.',
+                                ? context.l10n('Web session linked')
+                                : context.l10n('Web session not linked'),
                             actions: hasToken
                                 ? [
                                     TextButton(
-                                      onPressed:
-                                          Navigator.of(dialogContext).pop,
-                                      child: const Text('OK'),
+                                      onPressed: Navigator.of(
+                                        dialogContext,
+                                      ).pop,
+                                      child: Text(context.l10n('OK')),
                                     ),
                                   ]
                                 : [
                                     TextButton(
-                                      onPressed:
-                                          Navigator.of(dialogContext).pop,
-                                      child: const Text('Cancel'),
+                                      onPressed: Navigator.of(
+                                        dialogContext,
+                                      ).pop,
+                                      child: Text(context.l10n('Cancel')),
                                     ),
                                     FilledButton(
                                       onPressed: () {
@@ -88,7 +91,7 @@ class ProfileCard extends StatelessWidget {
                                           ),
                                         );
                                       },
-                                      child: const Text('Log in'),
+                                      child: Text(context.l10n('Log in')),
                                     ),
                                   ],
                           ),
@@ -118,9 +121,9 @@ class ProfileCard extends StatelessWidget {
         }
         return ListTile(
           leading: const Icon(Icons.no_accounts_rounded),
-          title: const Text('Anonymous'),
-          subtitle: const Text(
-            'Log in to chat, view followed streams, and more.',
+          title: Text(context.l10n('Anonymous')),
+          subtitle: Text(
+            context.l10n('Log in to chat, view followed streams, and more.'),
           ),
           trailing: const SizedBox(
             height: double.infinity,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/widgets/blurred_container.dart';
 
 class FrostyNotification extends StatelessWidget {
@@ -29,7 +30,7 @@ class FrostyNotification extends StatelessWidget {
                 Icon(Icons.info_outline_rounded, size: 20),
                 Expanded(
                   child: Text(
-                    message,
+                    context.l10n(message),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontWeight: FontWeight.w500),
@@ -43,7 +44,7 @@ class FrostyNotification extends StatelessWidget {
               onPressed: onDismissed,
               icon: const Icon(Icons.close_rounded, size: 20),
               visualDensity: VisualDensity.compact,
-              tooltip: 'Dismiss',
+              tooltip: context.l10n('Dismiss'),
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
         ],

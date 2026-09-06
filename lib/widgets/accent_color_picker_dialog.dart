@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/widgets/frosty_dialog.dart';
 
 class AccentColorPickerDialog extends StatefulWidget {
@@ -45,7 +46,7 @@ class _AccentColorPickerDialogState extends State<AccentColorPickerDialog> {
   @override
   Widget build(BuildContext context) {
     return FrostyDialog(
-      title: 'Accent color',
+      title: context.l10n('Accent color'),
       content: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -67,7 +68,7 @@ class _AccentColorPickerDialogState extends State<AccentColorPickerDialog> {
               child: FilledButton.tonalIcon(
                 icon: const Icon(Icons.casino_rounded),
                 onPressed: _generateRandomColor,
-                label: const Text('Random'),
+                label: Text(context.l10n('Random')),
               ),
             ),
           ],
@@ -76,11 +77,11 @@ class _AccentColorPickerDialogState extends State<AccentColorPickerDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n('Cancel')),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Done'),
+          child: Text(context.l10n('Done')),
         ),
       ],
     );

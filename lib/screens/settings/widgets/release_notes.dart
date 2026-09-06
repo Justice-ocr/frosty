@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/settings/stores/settings_store.dart';
 import 'package:frosty/widgets/blurred_container.dart';
 import 'package:frosty/widgets/frosty_scrollbar.dart';
@@ -57,11 +58,11 @@ class _ReleaseNotesState extends State<ReleaseNotes> {
               : Brightness.dark,
         ),
         leading: IconButton(
-          tooltip: 'Back',
+          tooltip: context.l10n('Back'),
           icon: Icon(Icons.adaptive.arrow_back_rounded),
           onPressed: Navigator.of(context).pop,
         ),
-        title: const Text('Release notes'),
+        title: Text(context.l10n('Release notes')),
       ),
       body: Stack(
         children: [

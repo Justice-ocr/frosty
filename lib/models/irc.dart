@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frosty/cache_manager.dart';
@@ -173,7 +174,7 @@ class IRCMessage {
         WidgetSpan(
           alignment: PlaceholderAlignment.middle,
           child: Tooltip(
-            message: 'Historical message',
+            message: context.l10n('Historical message'),
             preferBelow: false,
             triggerMode: TooltipTriggerMode.tap,
             child: Icon(
@@ -181,9 +182,9 @@ class IRCMessage {
               size: badgeSize,
               color:
                   Theme.of(context).iconTheme.color?.withValues(alpha: 0.5) ??
-                  Theme.of(context).colorScheme.onSurfaceVariant.withValues(
-                    alpha: 0.5,
-                  ),
+                  Theme.of(
+                    context,
+                  ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
             ),
           ),
         ),
@@ -202,8 +203,8 @@ class IRCMessage {
             triggerMode: TooltipTriggerMode.tap,
             preferBelow: false,
             message: isCurrentChannel
-                ? 'Sent from ${sourceChannelUser.displayName} (current channel)'
-                : 'Sent from ${sourceChannelUser.displayName}',
+                ? '${context.l10n('Sent from')} ${sourceChannelUser.displayName}（${context.l10n('current channel')}）'
+                : '${context.l10n('Sent from')} ${sourceChannelUser.displayName}',
             child: CachedNetworkImage(
               cacheManager: CustomCacheManager.instance,
               imageUrl: sourceChannelUser.profileImageUrl,
@@ -685,11 +686,11 @@ class IRCMessage {
     final isHistorical = tags['historical'] == '1';
     final effectiveTimestamp =
         (timestamp == TimestampType.disabled &&
-                ((isHistorical && showHistoricalTimestamps) || forceTimestamp))
-            ? (MediaQuery.alwaysUse24HourFormatOf(context)
-                ? TimestampType.twentyFour
-                : TimestampType.twelve)
-            : timestamp;
+            ((isHistorical && showHistoricalTimestamps) || forceTimestamp))
+        ? (MediaQuery.alwaysUse24HourFormatOf(context)
+              ? TimestampType.twentyFour
+              : TimestampType.twelve)
+        : timestamp;
 
     _addTimestamp(span, style, effectiveTimestamp);
     _addHistoricalAndChannelBadges(
@@ -930,7 +931,7 @@ class IRCMessage {
           if (showCopyName)
             ListTile(
               leading: const Icon(Icons.copy_rounded),
-              title: const Text('Copy name'),
+              title: Text(context.l10n('Copy name')),
               onTap: () {
                 Clipboard.setData(ClipboardData(text: title.split(' (')[0]));
 
@@ -939,7 +940,7 @@ class IRCMessage {
             ),
           ListTile(
             leading: const Icon(Icons.copy_rounded),
-            title: const Text('Copy image URL'),
+            title: Text(context.l10n('Copy image URL')),
             onTap: () {
               Clipboard.setData(ClipboardData(text: url));
 
@@ -948,7 +949,7 @@ class IRCMessage {
           ),
           ListTile(
             leading: const Icon(Icons.launch_rounded),
-            title: const Text('Open in browser'),
+            title: Text(context.l10n('Open in browser')),
             onTap: () {
               launchUrl(
                 Uri.parse(url),
@@ -1249,9 +1250,7 @@ class IRCMessage {
     String? actionLabel,
   }) => IRCMessage(
     raw: '',
-    tags: {
-      'tmi-sent-ts': '${DateTime.now().millisecondsSinceEpoch}',
-    },
+    tags: {'tmi-sent-ts': '${DateTime.now().millisecondsSinceEpoch}'},
     command: Command.notice,
     message: message,
     actionCallback: actionCallback,

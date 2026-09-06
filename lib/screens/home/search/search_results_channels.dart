@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frosty/apis/base_api_client.dart';
@@ -58,7 +59,7 @@ class _SearchResultsChannelsState extends State<SearchResultsChannels> {
       debugPrint('Search channels error: $error');
       final snackBar = SnackBar(
         content: AlertMessage(
-          message: 'Unable to find channel',
+          message: context.l10n('Unable to find channel'),
           centered: false,
         ),
       );
@@ -93,11 +94,11 @@ class _SearchResultsChannelsState extends State<SearchResultsChannels> {
                   ChannelSkeletonLoader(index: index),
             );
           case FutureStatus.rejected:
-            return const SliverToBoxAdapter(
+            return SliverToBoxAdapter(
               child: SizedBox(
                 height: 100.0,
                 child: AlertMessage(
-                  message: 'Unable to load channels',
+                  message: context.l10n('Unable to load channels'),
                   vertical: true,
                 ),
               ),
@@ -121,7 +122,9 @@ class _SearchResultsChannelsState extends State<SearchResultsChannels> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        settings: const RouteSettings(name: VideoChat.routeName),
+                        settings: const RouteSettings(
+                          name: VideoChat.routeName,
+                        ),
                         builder: (context) => VideoChat(
                           userId: channel.id,
                           userName: channel.displayName,
@@ -161,7 +164,9 @@ class _SearchResultsChannelsState extends State<SearchResultsChannels> {
                   );
                 }),
                 ListTile(
-                  title: Text('Go to channel "${widget.query}"'),
+                  title: Text(
+                    '${context.l10n('Go to channel')} "${widget.query}"',
+                  ),
                   onTap: () => _handleSearch(context, widget.query),
                   trailing: const Icon(Icons.chevron_right_rounded),
                 ),

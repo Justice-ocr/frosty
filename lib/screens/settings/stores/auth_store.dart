@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frosty/apis/base_api_client.dart';
 import 'package:frosty/apis/twitch_api.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/constants.dart';
 import 'package:frosty/main.dart';
 import 'package:frosty/screens/settings/stores/user_store.dart';
@@ -233,10 +234,11 @@ abstract class AuthBase with Store {
         .where((blockedUser) => blockedUser.userId == targetUserId)
         .isNotEmpty;
 
-    final title = isBlocked ? 'Unblock' : 'Block';
+    final title = context.l10n(isBlocked ? 'Unblock' : 'Block');
 
-    final message =
-        'Are you sure you want to ${isBlocked ? 'unblock "$targetUser"?' : 'block "$targetUser"? This will remove them from channel lists, search results, and chat messages.'}';
+    final message = isBlocked
+        ? '${context.l10n('Are you sure you want to unblock')} "$targetUser"?'
+        : '${context.l10n('Are you sure you want to block')} "$targetUser"? ${context.l10n('This will remove them from channel lists, search results, and chat messages.')}';
 
     void onPressed() {
       if (isBlocked) {
@@ -255,9 +257,9 @@ abstract class AuthBase with Store {
         actions: [
           TextButton(
             onPressed: Navigator.of(context).pop,
-            child: const Text('Cancel'),
+            child: Text(context.l10n('Cancel')),
           ),
-          FilledButton(onPressed: onPressed, child: const Text('Yes')),
+          FilledButton(onPressed: onPressed, child: Text(context.l10n('Yes'))),
         ],
       ),
     );
@@ -510,12 +512,12 @@ abstract class AuthBase with Store {
     showDialog(
       context: context,
       builder: (dialogContext) => FrostyDialog(
-        title: 'Moderator tools not enabled',
+        title: context.l10n('Moderator tools not enabled'),
         message: message,
         actions: [
           TextButton(
             onPressed: Navigator.of(dialogContext).pop,
-            child: const Text('OK'),
+            child: Text(context.l10n('OK')),
           ),
         ],
       ),

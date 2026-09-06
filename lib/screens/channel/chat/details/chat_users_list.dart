@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/apis/twitch_api.dart';
 import 'package:frosty/screens/channel/chat/details/chat_details_store.dart';
 import 'package:frosty/screens/channel/chat/stores/chat_store.dart';
@@ -46,14 +47,14 @@ class _ChattersListState extends State<ChattersList> {
                   autocorrect: false,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.filter_list_rounded),
-                    hintText: 'Filter chatters',
+                    hintText: context.l10n('Filter chatters'),
                     suffixIcon:
                         widget.chatDetailsStore.textFieldFocusNode.hasFocus ||
                             widget.chatDetailsStore.filterText.isNotEmpty
                         ? IconButton(
                             tooltip: widget.chatDetailsStore.filterText.isEmpty
-                                ? 'Cancel'
-                                : 'Clear',
+                                ? context.l10n('Cancel')
+                                : context.l10n('Clear'),
                             onPressed: () {
                               if (widget.chatDetailsStore.filterText.isEmpty) {
                                 widget.chatDetailsStore.textFieldFocusNode
@@ -98,7 +99,7 @@ class _ChattersListState extends State<ChattersList> {
                                 ),
                                 sliver: SliverToBoxAdapter(
                                   child: Text(
-                                    '${NumberFormat().format(widget.chatDetailsStore.chatUsers.length)} chatters found',
+                                    '${NumberFormat().format(widget.chatDetailsStore.chatUsers.length)} ${context.l10n('Chatters found')}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18.0,
@@ -107,20 +108,20 @@ class _ChattersListState extends State<ChattersList> {
                                 ),
                               ),
                             if (widget.chatDetailsStore.chatUsers.isEmpty)
-                              const SliverFillRemaining(
+                              SliverFillRemaining(
                                 hasScrollBody: false,
                                 child: AlertMessage(
-                                  message: 'No chatters found',
+                                  message: context.l10n('No chatters found'),
                                 ),
                               )
                             else if (widget
                                 .chatDetailsStore
                                 .filteredUsers
                                 .isEmpty)
-                              const SliverFillRemaining(
+                              SliverFillRemaining(
                                 hasScrollBody: false,
                                 child: AlertMessage(
-                                  message: 'No matching chatters',
+                                  message: context.l10n('No matching chatters'),
                                 ),
                               )
                             else

@@ -49,7 +49,8 @@ class _SearchState extends State<Search> {
                     slivers: [
                       SliverToBoxAdapter(
                         child: SizedBox(
-                          height: MediaQuery.of(context).padding.top +
+                          height:
+                              MediaQuery.of(context).padding.top +
                               _kSearchBarHeight,
                         ),
                       ),
@@ -59,8 +60,8 @@ class _SearchState extends State<Search> {
                           padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).padding.bottom,
                           ),
-                          child: const AlertMessage(
-                            message: 'No recent searches',
+                          child: AlertMessage(
+                            message: context.l10n('No recent searches'),
                             vertical: true,
                           ),
                         ),
@@ -78,7 +79,8 @@ class _SearchState extends State<Search> {
                   child: ListView(
                     controller: widget.scrollController,
                     padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).padding.top +
+                      top:
+                          MediaQuery.of(context).padding.top +
                           _kSearchBarHeight,
                       bottom: MediaQuery.of(context).padding.bottom,
                     ),
@@ -113,11 +115,13 @@ class _SearchState extends State<Search> {
                             _searchStore.handleQuery(searchTerm);
                             _searchStore.textEditingController.selection =
                                 TextSelection.fromPosition(
-                              TextPosition(
-                                offset: _searchStore
-                                    .textEditingController.text.length,
-                              ),
-                            );
+                                  TextPosition(
+                                    offset: _searchStore
+                                        .textEditingController
+                                        .text
+                                        .length,
+                                  ),
+                                );
                           },
                         ),
                       ),
@@ -201,16 +205,17 @@ class _SearchState extends State<Search> {
                         onChanged: _searchStore.onSearchTextChanged,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.search_rounded),
-                          hintText:
-                              context.l10n('Search channels or categories'),
-                          suffixIcon: _searchStore
-                                      .textFieldFocusNode.hasFocus ||
+                          hintText: context.l10n(
+                            'Search channels or categories',
+                          ),
+                          suffixIcon:
+                              _searchStore.textFieldFocusNode.hasFocus ||
                                   _searchStore.searchText.isNotEmpty
                               ? IconButton(
                                   icon: const Icon(Icons.close_rounded),
                                   tooltip: _searchStore.searchText.isEmpty
-                                      ? 'Cancel'
-                                      : 'Clear',
+                                      ? context.l10n('Cancel')
+                                      : context.l10n('Clear'),
                                   onPressed: () {
                                     if (_searchStore.searchText.isEmpty) {
                                       _searchStore.textFieldFocusNode.unfocus();

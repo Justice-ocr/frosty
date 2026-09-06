@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/settings/stores/settings_store.dart';
 import 'package:frosty/utils/modal_bottom_sheet.dart';
 import 'package:frosty/widgets/alert_message.dart';
@@ -39,7 +40,7 @@ class _SettingsMutedWordsState extends State<SettingsMutedWords> {
   Widget build(BuildContext context) {
     return ListTile(
       trailing: const Icon(Icons.edit),
-      title: const Text('Muted keywords'),
+      title: Text(context.l10n('Muted keywords')),
       onTap: () => showModalBottomSheetWithProperFocus(
         isScrollControlled: true,
         context: context,
@@ -62,11 +63,11 @@ class _SettingsMutedWordsState extends State<SettingsMutedWords> {
                       },
                       autocorrect: false,
                       decoration: InputDecoration(
-                        hintText: 'Enter keywords to mute',
+                        hintText: context.l10n('Enter keywords to mute'),
                         suffixIcon: IconButton(
                           tooltip: textController.text.isEmpty
-                              ? 'Cancel'
-                              : 'Add keyword',
+                              ? context.l10n('Cancel')
+                              : context.l10n('Add keyword'),
                           onPressed: () {
                             if (textController.text.isEmpty) {
                               textFieldFocusNode.unfocus();
@@ -80,9 +81,9 @@ class _SettingsMutedWordsState extends State<SettingsMutedWords> {
                     ),
                   ),
                   if (settingsStore.mutedWords.isEmpty)
-                    const Expanded(
+                    Expanded(
                       child: AlertMessage(
-                        message: 'No muted keywords',
+                        message: context.l10n('No muted keywords'),
                         vertical: true,
                       ),
                     ),
@@ -96,18 +97,19 @@ class _SettingsMutedWordsState extends State<SettingsMutedWords> {
                               settingsStore.mutedWords.elementAt(index),
                             ),
                             trailing: IconButton(
-                              icon: const Icon(
-                                Icons.delete_outline_rounded,
-                              ),
+                              icon: const Icon(Icons.delete_outline_rounded),
                               onPressed: () {
-                                final word =
-                                    settingsStore.mutedWords.elementAt(index);
+                                final word = settingsStore.mutedWords.elementAt(
+                                  index,
+                                );
                                 removeMutedWord(index);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text("Removed '$word'"),
+                                    content: Text(
+                                      '${context.l10n('Removed')} "$word"',
+                                    ),
                                     action: SnackBarAction(
-                                      label: 'Undo',
+                                      label: context.l10n('Undo'),
                                       onPressed: () {
                                         settingsStore.mutedWords = [
                                           ...settingsStore.mutedWords,

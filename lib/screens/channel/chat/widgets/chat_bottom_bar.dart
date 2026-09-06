@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frosty/constants.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/models/irc.dart';
 import 'package:frosty/screens/channel/chat/details/chat_details.dart';
 import 'package:frosty/screens/channel/chat/stores/chat_store.dart';
@@ -40,7 +41,7 @@ class ChatBottomBar extends StatelessWidget {
 
     final emoteMenuButton = isEmotesEnabled
         ? Tooltip(
-            message: 'Emote menu',
+            message: context.l10n('Emote menu'),
             preferBelow: false,
             child: IconButton(
               color: chatStore.assetsStore.showEmoteMenu
@@ -74,7 +75,7 @@ class ChatBottomBar extends StatelessWidget {
         final hasChatDelay =
             chatStore.settings.showVideo && effectiveChatDelay > 0;
 
-        const loginTooltipMessage = 'Log in to chat';
+        final loginTooltipMessage = context.l10n('Log in to chat');
 
         final bottomBarContent = Column(
           children: [
@@ -124,7 +125,7 @@ class ChatBottomBar extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        tooltip: 'Cancel reply',
+                        tooltip: context.l10n('Cancel reply'),
                         visualDensity: VisualDensity.compact,
                         onPressed: () => chatStore.replyingToMessage = null,
                         icon: const Icon(Icons.close, size: 20),
@@ -234,7 +235,7 @@ class ChatBottomBar extends StatelessWidget {
                                 }
                               : null,
                           child: IconButton(
-                            tooltip: 'Enter a message',
+                            tooltip: context.l10n('Enter a message'),
                             onPressed: isDisabled
                                 ? null
                                 : () {
@@ -301,21 +302,21 @@ class ChatBottomBar extends StatelessWidget {
                                     ? loginTooltipMessage
                                     : !isConnected
                                     ? (hasConnected
-                                          ? 'Chat disconnected'
-                                          : 'Connecting...')
+                                          ? context.l10n('Chat disconnected')
+                                          : context.l10n('Connecting...'))
                                     : isWaitingForAck
-                                    ? 'Sending...'
+                                    ? context.l10n('Sending...')
                                     : chatStore.replyingToMessage != null
                                     ? channelDisplayName != null
-                                        ? 'Reply in ${channelDisplayName!}'
-                                        : 'Reply'
+                                          ? '${context.l10n('Reply in')} ${channelDisplayName!}'
+                                          : context.l10n('Reply')
                                     : hasChatDelay
                                     ? channelDisplayName != null
-                                        ? 'Chat in ${channelDisplayName!} (${effectiveChatDelay.toInt()}s delay)'
-                                        : 'Chat (${effectiveChatDelay.toInt()}s delay)'
+                                          ? '${context.l10n('Chat in')} ${channelDisplayName!} (${effectiveChatDelay.toInt()}s ${context.l10n('Delay').toLowerCase()})'
+                                          : '${context.l10n('Chat')} (${effectiveChatDelay.toInt()}s ${context.l10n('Delay').toLowerCase()})'
                                     : channelDisplayName != null
-                                    ? 'Chat in ${channelDisplayName!}'
-                                    : 'Chat',
+                                    ? '${context.l10n('Chat in')} ${channelDisplayName!}'
+                                    : context.l10n('Chat'),
                               ),
                               controller: chatStore.textController,
                               onSubmitted: chatStore.sendMessage,
@@ -336,8 +337,8 @@ class ChatBottomBar extends StatelessWidget {
                         ? Observer(
                             builder: (context) => IconButton(
                               tooltip: chatStore.isWaitingForAck
-                                  ? 'Sending...'
-                                  : 'Send',
+                                  ? context.l10n('Sending...')
+                                  : context.l10n('Send'),
                               icon: chatStore.isWaitingForAck
                                   ? const SizedBox(
                                       width: 20,
@@ -359,7 +360,7 @@ class ChatBottomBar extends StatelessWidget {
                           )
                         : IconButton(
                             icon: Icon(Icons.adaptive.more_rounded),
-                            tooltip: 'More',
+                            tooltip: context.l10n('More'),
                             onPressed: () =>
                                 showModalBottomSheetWithProperFocus(
                                   isScrollControlled: true,

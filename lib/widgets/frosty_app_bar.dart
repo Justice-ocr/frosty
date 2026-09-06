@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 
 class FrostyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;
@@ -16,7 +17,7 @@ class FrostyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: IconButton(
-        tooltip: 'Back',
+        tooltip: context.l10n('Back'),
         icon: Icon(Icons.adaptive.arrow_back_rounded),
         onPressed: Navigator.of(context).pop,
       ),

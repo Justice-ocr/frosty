@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/main.dart';
 import 'package:frosty/screens/onboarding/login_webview.dart';
 import 'package:frosty/screens/settings/stores/auth_store.dart';
@@ -35,8 +36,7 @@ class UnauthorizedInterceptor extends Interceptor {
 
       // Moderator actions without scopes → opt-in Enable flow, not a generic
       // "missing permissions" re-login for core scopes.
-      if (isTwitchModeratorActionPath(path) &&
-          !_authStore.hasModeratorScopes) {
+      if (isTwitchModeratorActionPath(path) && !_authStore.hasModeratorScopes) {
         _showAuthDialog(
           title: 'Enable moderator tools',
           message: enableModeratorToolsDialogMessage(),
@@ -107,7 +107,7 @@ class UnauthorizedInterceptor extends Interceptor {
                 _isDialogShowing = false;
                 Navigator.of(dialogContext).pop();
               },
-              child: const Text('Cancel'),
+              child: Text(dialogContext.l10n('Cancel')),
             ),
             FilledButton(
               onPressed: () {

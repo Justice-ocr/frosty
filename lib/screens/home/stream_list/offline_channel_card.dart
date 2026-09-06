@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/models/followed_channel.dart';
 import 'package:frosty/screens/channel/channel.dart';
 import 'package:frosty/screens/settings/stores/auth_store.dart';
@@ -37,20 +38,21 @@ class OfflineChannelCard extends StatelessWidget {
     String followedText;
     if (followedDuration.inDays >= 365) {
       final years = followedDuration.inDays ~/ 365;
-      followedText = 'Following for $years ${years == 1 ? 'year' : 'years'}';
+      followedText =
+          '${context.l10n('Following for')} $years ${context.l10n(years == 1 ? 'year' : 'years')}';
     } else if (followedDuration.inDays >= 30) {
       final months = followedDuration.inDays ~/ 30;
       followedText =
-          'Following for $months ${months == 1 ? 'month' : 'months'}';
+          '${context.l10n('Following for')} $months ${context.l10n(months == 1 ? 'month' : 'months')}';
     } else if (followedDuration.inDays > 0) {
       followedText =
-          'Following for ${followedDuration.inDays} ${followedDuration.inDays == 1 ? 'day' : 'days'}';
+          '${context.l10n('Following for')} ${followedDuration.inDays} ${context.l10n(followedDuration.inDays == 1 ? 'day' : 'days')}';
     } else if (followedDuration.inHours > 0) {
       followedText =
-          'Following for ${followedDuration.inHours} ${followedDuration.inHours == 1 ? 'hour' : 'hours'}';
+          '${context.l10n('Following for')} ${followedDuration.inHours} ${context.l10n(followedDuration.inHours == 1 ? 'hour' : 'hours')}';
     } else {
       followedText =
-          'Following for ${followedDuration.inMinutes} ${followedDuration.inMinutes == 1 ? 'minute' : 'minutes'}';
+          '${context.l10n('Following for')} ${followedDuration.inMinutes} ${context.l10n(followedDuration.inMinutes == 1 ? 'minute' : 'minutes')}';
     }
 
     return InkWell(

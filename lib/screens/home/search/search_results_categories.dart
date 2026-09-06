@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frosty/models/category.dart';
 import 'package:frosty/screens/home/search/search_store.dart';
@@ -36,11 +37,11 @@ class SearchResultsCategories extends StatelessWidget {
               itemBuilder: (context, index) => const CategorySkeletonLoader(),
             );
           case FutureStatus.rejected:
-            return const SliverToBoxAdapter(
+            return SliverToBoxAdapter(
               child: SizedBox(
                 height: 100.0,
                 child: AlertMessage(
-                  message: 'Unable to load categories',
+                  message: context.l10n('Unable to load categories'),
                   vertical: true,
                 ),
               ),
@@ -49,11 +50,11 @@ class SearchResultsCategories extends StatelessWidget {
             final CategoriesTwitch? categories = future.result;
 
             if (categories == null) {
-              return const SliverToBoxAdapter(
+              return SliverToBoxAdapter(
                 child: SizedBox(
                   height: 100.0,
                   child: AlertMessage(
-                    message: 'Failed to get categories',
+                    message: context.l10n('Failed to get categories'),
                     vertical: true,
                   ),
                 ),
@@ -61,11 +62,11 @@ class SearchResultsCategories extends StatelessWidget {
             }
 
             if (categories.data.isEmpty) {
-              return const SliverToBoxAdapter(
+              return SliverToBoxAdapter(
                 child: SizedBox(
                   height: 100.0,
                   child: AlertMessage(
-                    message: 'No matching categories',
+                    message: context.l10n('No matching categories'),
                     vertical: true,
                   ),
                 ),

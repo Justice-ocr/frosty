@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frosty/apis/twitch_api.dart';
 import 'package:frosty/constants.dart';
@@ -64,75 +65,74 @@ class _CategoryStreamsState extends State<CategoryStreams> {
                 right: MediaQuery.of(context).padding.right,
               ),
               child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // App bar section
-                    SizedBox(
-                      height: kToolbarHeight,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            tooltip: 'Back',
-                            icon: Icon(Icons.adaptive.arrow_back_rounded),
-                            onPressed: Navigator.of(context).pop,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // App bar section
+                  SizedBox(
+                    height: kToolbarHeight,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          tooltip: context.l10n('Back'),
+                          icon: Icon(Icons.adaptive.arrow_back_rounded),
+                          onPressed: Navigator.of(context).pop,
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Category card section
+                  Observer(
+                    builder: (_) {
+                      if (_listStore.categoryDetails != null) {
+                        return _TransparentCategoryCard(
+                          category: _listStore.categoryDetails!,
+                        );
+                      } else {
+                        // Skeleton loader for category card
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 16,
+                            left: 16,
+                            right: 16,
                           ),
-                        ],
-                      ),
-                    ),
-                    // Category card section
-                    Observer(
-                      builder: (_) {
-                        if (_listStore.categoryDetails != null) {
-                          return _TransparentCategoryCard(
-                            category: _listStore.categoryDetails!,
-                          );
-                        } else {
-                          // Skeleton loader for category card
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: 16,
-                              left: 16,
-                              right: 16,
-                            ),
-                            child: Row(
-                              spacing: 12,
-                              children: [
-                                const SizedBox(
-                                  width: 80,
-                                  child: AspectRatio(
-                                    aspectRatio: 3 / 4,
-                                    child: SkeletonLoader(
-                                      borderRadius: kCardBorderRadius,
+                          child: Row(
+                            spacing: 12,
+                            children: [
+                              const SizedBox(
+                                width: 80,
+                                child: AspectRatio(
+                                  aspectRatio: 3 / 4,
+                                  child: SkeletonLoader(
+                                    borderRadius: kCardBorderRadius,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  spacing: 8,
+                                  children: [
+                                    SkeletonLoader(
+                                      height: 20,
+                                      width: double.infinity,
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
-                                  ),
+                                    SkeletonLoader(
+                                      height: 16,
+                                      width: 120,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  ],
                                 ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    spacing: 8,
-                                    children: [
-                                      SkeletonLoader(
-                                        height: 20,
-                                        width: double.infinity,
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      SkeletonLoader(
-                                        height: 16,
-                                        width: 120,
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ],
-                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -178,9 +178,8 @@ class _TransparentCategoryCard extends StatelessWidget {
                     null,
                     '${artWidth}x$artHeight.jpg',
                   ),
-                  placeholder: (context, url) => const SkeletonLoader(
-                    borderRadius: kCardBorderRadius,
-                  ),
+                  placeholder: (context, url) =>
+                      const SkeletonLoader(borderRadius: kCardBorderRadius),
                   fit: BoxFit.cover,
                 ),
               ),

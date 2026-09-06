@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frosty/apis/twitch_api.dart';
@@ -99,8 +100,8 @@ class _CategoriesState extends State<Categories>
                 ],
               );
             } else {
-              statusWidget = const AlertMessage(
-                message: 'No top categories',
+              statusWidget = AlertMessage(
+                message: context.l10n('No top categories'),
                 vertical: true,
               );
             }

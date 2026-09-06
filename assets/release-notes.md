@@ -1,3 +1,14 @@
+## v5.2.0-frosty.10
+
+September 6, 2026
+
+### Improvements
+
+- Completed Simplified Chinese localization across account, search, chat, video controls, moderation, settings, notifications, and error states.
+- Added localized background audio controls and follow-duration labels.
+
+---
+
 ## v5.2.0
 
 August 16, 2026

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/settings/stores/auth_store.dart';
 import 'package:frosty/utils.dart';
 import 'package:frosty/widgets/alert_message.dart';
@@ -21,8 +22,11 @@ class BlockedUsers extends StatelessWidget {
               HapticFeedback.lightImpact();
               await authStore.user.refreshBlockedUsers();
             },
-            child: const Center(
-              child: AlertMessage(message: 'No blocked users', vertical: true),
+            child: Center(
+              child: AlertMessage(
+                message: context.l10n('No blocked users'),
+                vertical: true,
+              ),
             ),
           );
         }
@@ -50,7 +54,7 @@ class BlockedUsers extends StatelessWidget {
                   targetUser: displayName,
                   targetUserId: blockedUser.userId,
                 ),
-                child: const Text('Unblock'),
+                child: Text(context.l10n('Unblock')),
               ),
             );
           }).toList(),

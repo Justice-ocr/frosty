@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frosty/apis/base_api_client.dart';
+import 'package:frosty/l10n/app_localizations.dart';
 import 'package:frosty/screens/channel/chat/stores/chat_store.dart';
 import 'package:frosty/screens/onboarding/login_webview.dart';
 import 'package:frosty/screens/settings/stores/auth_store.dart';
@@ -71,9 +72,11 @@ class ModerationActions extends StatelessWidget {
             openEnableModeratorTools(auth);
           },
           leading: const Icon(Icons.shield_outlined),
-          title: const Text('Enable moderator tools…'),
-          subtitle: const Text(
-            'Authorize Twitch permissions to delete, timeout, and ban.',
+          title: Text(context.l10n('Enable moderator tools…')),
+          subtitle: Text(
+            context.l10n(
+              'Authorize Twitch permissions to delete, timeout, and ban.',
+            ),
           ),
         ),
       ],
@@ -94,7 +97,7 @@ class ModerationActions extends StatelessWidget {
                 Expanded(
                   child: _button(
                     Icons.delete_outline,
-                    'Delete',
+                    context.l10n('Delete'),
                     () => _run(context, _delete),
                   ),
                 ),
@@ -103,7 +106,7 @@ class ModerationActions extends StatelessWidget {
               Expanded(
                 child: _button(
                   Icons.timer_outlined,
-                  'Timeout 10min',
+                  context.l10n('Timeout 10min'),
                   () => _run(context, _timeout),
                 ),
               ),
@@ -111,7 +114,7 @@ class ModerationActions extends StatelessWidget {
               Expanded(
                 child: _button(
                   Icons.block,
-                  'Ban',
+                  context.l10n('Ban'),
                   () => _run(context, _ban),
                 ),
               ),
@@ -124,7 +127,7 @@ class ModerationActions extends StatelessWidget {
           ListTile(
             onTap: () => _run(context, _unban),
             leading: const Icon(Icons.lock_open_rounded),
-            title: const Text('Remove ban or timeout'),
+            title: Text(context.l10n('Remove ban or timeout')),
           ),
       ],
     );
