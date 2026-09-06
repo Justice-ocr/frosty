@@ -73,6 +73,23 @@ jobs:
             echo keyAlias=upload >> $KEY_FILE_PATH
             echo storeFile=$GITHUB_WORKSPACE/android/upload-keystore.jks >> $KEY_FILE_PATH
           fi
+
+      # workflow_dispatch runs on a branch, so derive a stable release tag
+      # from pubspec.yaml instead of using github.ref_name (for example main).
+      - name: Determine release tag
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            RELEASE_TAG="${GITHUB_REF_NAME}"
+          else
+            VERSION="$(sed -n 's/^version: *\([^+[:space:]]*\).*/\1/p' pubspec.yaml | head -n 1)"
+            if [ -z "$VERSION" ]; then
+              echo "::error::Unable to read version from pubspec.yaml"
+              exit 1
+            fi
+            RELEASE_TAG="v${VERSION}"
+          fi
+          echo "RELEASE_TAG=$RELEASE_TAG" >> "$GITHUB_ENV"
+          echo "Using release tag: $RELEASE_TAG"
       
       # Build the APK with the environment variables and move/rename it.
       - name: Build for Android
@@ -86,13 +103,13 @@ jobs:
             exit 1
           fi
           flutter build apk --dart-define CLIENT_ID=$CLIENT_ID --dart-define SECRET=$SECRET
-          mv build/app/outputs/flutter-apk/app-release.apk frosty-${{ github.ref_name }}.apk
+          mv build/app/outputs/flutter-apk/app-release.apk frosty-${RELEASE_TAG}.apk
 
       # Extract release notes from assets/release-notes.md for the current version.
       - name: Extract release notes
         id: release_notes
         run: |
-          VERSION="${{ github.ref_name }}"
+          VERSION="$RELEASE_TAG"
           RELEASE_NOTES_FILE="assets/release-notes.md"
 
           # Extract the section for this version using awk
@@ -135,8 +152,9 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           draft: false
+          tag_name: ${{ env.RELEASE_TAG }}
           # Fork tokens may not have the generate-release-notes permission.
           # Always provide an explicit body instead of calling that API.
           generate_release_notes: false
-          body: ${{ steps.release_notes.outputs.found == 'true' && steps.release_notes.outputs.body || format('Frosty fork release {0}.', github.ref_name) }}
-          files: frosty-${{ github.ref_name }}.apk
+          body: ${{ steps.release_notes.outputs.found == 'true' && steps.release_notes.outputs.body || format('Frosty fork release {0}.', env.RELEASE_TAG) }}
+          files: frosty-${{ env.RELEASE_TAG }}.apk
